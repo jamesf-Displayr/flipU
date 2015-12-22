@@ -1,0 +1,17 @@
+{
+    "contents" : "#'  \\code{IfThen}\n#' @description If else statment as a single line.\n#' @param condition A logical expression.\n#' @param TRUE.result The object to be returned if \\code{condition} is \\code{TRUE}.\n#' @param FALSE.result The object to be returned if \\code{condition} is \\code{FALSE}.\nIfThen <- function(condition, TRUE.result, FALSE.result)\n{\n    if(condition)\n        return(TRUE.result);\n    return(FALSE.result);\n}\n\n#' \\code{RemoveRowsAndOrColumns}\n#' @description Removes rows or columns from the table.\n#' @param x The data that is being analyzed\n#' @param row.names.to.remove A vector of the row labels to remove.\n#' @param column.names.to.remove A vector of the column labels to remove.\n#' @export\nRemoveRowsAndOrColumns = function(x,\n        row.names.to.remove = c(\"NET\", \"Total\", \"SUM\"),\n        column.names.to.remove = c(\"NET\", \"Total\", \"SUM\"))\n{\n    x[!rownames(x) %in% row.names.to.remove, !colnames(x) %in% column.names.to.remove ]\n}\n\n",
+    "created" : 1450736701936.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1530457414",
+    "id" : "23AEDF5D",
+    "lastKnownWriteTime" : 1450738399,
+    "path" : "~/GitHub/flipU/R/utilities.R",
+    "project_path" : "R/utilities.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

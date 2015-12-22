@@ -1,0 +1,10 @@
+Package: flipU
+Type: Package
+Title: Utilities for Use in flip Packages.
+Version: 0.1
+Date: 2015-12-22
+Author: Numbers International Pty Ltd
+Maintainer: Tim Bock <tim.bock@numbers.net.au>
+Description: Avoid having multiple utility functions in different packages.
+License: MIT + file LICENSE
+LazyData: TRUE
