@@ -3,6 +3,7 @@
 #' @param condition A logical expression.
 #' @param TRUE.result The object to be returned if \code{condition} is \code{TRUE}.
 #' @param FALSE.result The object to be returned if \code{condition} is \code{FALSE}.
+#' @export
 IfThen <- function(condition, TRUE.result, FALSE.result)
 {
     if(condition)
