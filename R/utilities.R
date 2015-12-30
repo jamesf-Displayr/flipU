@@ -108,7 +108,7 @@ ListToDataFrame <- function(list.of.variables, coerce.to.numeric = FALSE)
         }
         if (is.null(result))
         {
-            result <- as.data.frame(variable)
+            result <- as.data.frame(transformed.variable)
         } else {
             result <- cbind(result, as.data.frame(transformed.variable))
         }
