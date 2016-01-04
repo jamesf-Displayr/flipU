@@ -8,3 +8,4 @@ Maintainer: Tim Bock <tim.bock@numbers.net.au>
 Description: Avoid having multiple utility functions in different packages.
 License: MIT + file LICENSE
 LazyData: TRUE
+Suggests: testthat

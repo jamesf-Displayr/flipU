@@ -30,7 +30,7 @@ RemoveRowsAndOrColumns <- function(x,
 #' @param variable The factor variable to convert.
 #' @param variable.name The name of the input variable.
 #' @export
-FactorToIndicators <- function(variable, variable.name = deparse(substitute(variable))) 
+FactorToIndicators <- function(variable, variable.name = deparse(substitute(variable)))
 {
     result <- model.matrix( ~ variable - 1)
     colnames(result) <- paste0(variable.name, ":", levels(variable))
@@ -41,7 +41,7 @@ FactorToIndicators <- function(variable, variable.name = deparse(substitute(vari
 #' @description Convert an ordered factor to a numeric vector.
 #' @param x An ordered factor.
 #' @export
-OrderedToNumeric <- function(x) 
+OrderedToNumeric <- function(x)
 {
     if (is.ordered(x))
     {
@@ -56,14 +56,14 @@ OrderedToNumeric <- function(x)
 #' @param x A factor or ordered factor.
 #' @param variable.name The name of the variable.
 #' @export
-FactorToNumeric <- function(x, variable.name = deparse(substitute(x))) 
+FactorToNumeric <- function(x, variable.name = deparse(substitute(x)))
 {
     if (is.ordered(x))
     {
         return(OrderedToNumeric(x))
     }
     indicators <- FactorToIndicators(x, variable.name)
-    if (nrow(indicators) < length(x)) 
+    if (nrow(indicators) < length(x))
     {
         new.indicators <- matrix(NA, length(x), ncol(indicators))
         row.names <- as.numeric(dimnames(indicators)[[1]])
@@ -73,33 +73,33 @@ FactorToNumeric <- function(x, variable.name = deparse(substitute(x)))
     }
     return(indicators)
 }
- 
- 
+
+
 #' \code{ListToDataFrame}
 #' @description Coerce a list of numeric or factor variables into a data frame.
 #' @param list.of.variables A list containing the variables to combine. The elements of the list should be of class
 #' numeric, factor, or ordered factor.
 #' @param coerce.to.numeric A boolean value specifying whether or not factor variables should be coerced to numeric.
 #' @export
-ListToDataFrame <- function(list.of.variables, coerce.to.numeric = FALSE) 
+ListToDataFrame <- function(list.of.variables, coerce.to.numeric = FALSE)
 {
     result <- NULL
     nms <- names(list.of.variables)
     counter <- 0
-    for (variable in list.of.variables) 
+    for (variable in list.of.variables)
     {
-        counter <- counter + 1 
+        counter <- counter + 1
         variable.name <- nms[counter]
         if(is.character(variable))
         {
             stop(paste0("Variable ", counter, " is a Text variable. It needs to be converted to numeric data if to be used in cluster analysis."))
         }
-        if (is.data.frame(variable)) 
+        if (is.data.frame(variable))
         {
             transformed.variable <- ListToDataFrame(variable, coerce.to.numeric)
             colnames(transformed.variable ) <- paste0(variable.name, ":", colnames(transformed.variable ))
         } else {
-            if (coerce.to.numeric && is.factor(variable)) 
+            if (coerce.to.numeric && is.factor(variable))
             {
                 transformed.variable <- FactorToNumeric(variable, variable.name)#,                 variable.name = nms[counter])
             } else {
@@ -112,10 +112,10 @@ ListToDataFrame <- function(list.of.variables, coerce.to.numeric = FALSE)
         } else {
             result <- cbind(result, as.data.frame(transformed.variable))
         }
-        
+
         if (is.null(ncol(transformed.variable)))
         {
-            colnames(result)[ncol(result)] <- variable.name 
+            colnames(result)[ncol(result)] <- variable.name
         }
     }
     return(result)
