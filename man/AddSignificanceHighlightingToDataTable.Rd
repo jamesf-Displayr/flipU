@@ -22,7 +22,7 @@ have a value less than this, cells in columns.to.color will be colored red.}
 \item{blue.value}{A number specifying the lower bound for coloring cells blue, as above.}
 }
 \description{
-Add red and blue highlighting to a data table conditionally on the values in a 
+Add red and blue highlighting to a data table conditionally on the values in a
 specified column. Used to replicate Q's significance highlighting in the table.
 }
 \examples{

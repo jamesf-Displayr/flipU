@@ -5,23 +5,30 @@
 #'
 #' @param dd The \code{data frame} that you want to show as a widget.
 #' @param caption Text to be placed beneath the table.
-#' @param header.alignments A character vector with one element for each column in 
+#' @param header.alignments A character vector with one element for each column in
 #' \code{dd} which specifies whether the cells of each column should be left or right
-#' aligned. Acceptable values are \code{"right"} and \code{"left"}. If you don't 
+#' aligned. Acceptable values are \code{"right"} and \code{"left"}. If you don't
 #' specify the alignments then columns that look like text will be left-aligned, and
 #' columns that look like numbers will be right-aligned.
+#' @param allow.length.change Boolean value that determines whether or not the user is
+#' given a menu allowing them to choose the height of the table.
+#' @param length.menu A vector of integers specifying the options to show in the menu
+#' of table heights.
+#' @param page.length An integer specifying the initial height of the table.
 #'
 #' @examples
 #' my.df <- data.frame(First = c(1,2,3), Second = c("a", "b", "c"))
 #' my.dt <- DataTableWithRItemFormat(my.df, caption = "A nice table")
 #' my.dt
 #' @export
-DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NULL)
+DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NULL, allow.length.change = TRUE, length.menu = c(10,15,20), page.length = min(15, nrow(dd)))
 {
     #show.row.names = TRUE
     # Specify the header style information that will be used by datatables to draw the output.
     # For some reason this is handled separately to the style of the cell contents
     header.style <- "th { font-family: 'Segoe UI'; font-weight: bold; color: white; background-color: #5B9BD5; border-right-width: 1px; border-right-style: solid; border-right-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white;}"
+
+    caption.style <- "caption-side: bottom; text-align: center; font-family: 'Open Sans', sans-serif; font-size:10pt; font-weight:normal; color:#505050"
 
     num.col <- ncol(dd)
     dd$oddoreven <- 1:nrow(dd) %% 2 # Extra dummy column to help us format the table. Will be made invisible later
@@ -43,9 +50,9 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
     } else {
         if (length(header.alignments) != num.col)
         {
-            stop(paste0("dataTableWithRItemFormat: the number of specified header alignments (", 
-                        length(header.alignments), 
-                        ") doesn't match the number of columns in the table (", 
+            stop(paste0("dataTableWithRItemFormat: the number of specified header alignments (",
+                        length(header.alignments),
+                        ") doesn't match the number of columns in the table (",
                         num.col, ")."))
         }
         if (length(which(header.alignments != "right" & header.alignments != "left")) > 0)
@@ -64,17 +71,6 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
     header.names <- c(" ", col.names)
     column.to.remove <- num.col + 1
 
-    # } else {
-    #   header.names <- col.names
-    #   column.to.remove <- num.col
-    #   main.table.format.columns <- 0:num.col
-    #   right.align.columns <- right.align.columns - 1
-    #   left.align.columns <- left.align.columns - 1
-    # }
-    #cat(header.names)
-
-
-
     # The container parameter allows us to design the header of the table
     # using CSS
     my.container <-  htmltools::withTags(table(
@@ -87,8 +83,12 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
     ))
 
     my.options <- list(autoWidth = FALSE,
-                       columnDefs = list(list(targets = "_all", orderable = FALSE),
-                                         list(targets = column.to.remove, visible = FALSE),
+                       searching = FALSE,
+                       ordering = FALSE,
+                       lengthChange = allow.length.change,
+                       lengthMenu = length.menu,
+                       pageLength = page.length,
+                       columnDefs = list(list(targets = column.to.remove, visible = FALSE),
                                          list(targets = " ", className = 'dt-center'),
                                          list(targets = left.align.columns, className = 'dt-left'),
                                          list(targets = right.align.columns, className = 'dt-right'))
@@ -99,7 +99,7 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
                           class = 'hover', # Built-in class with least amount of existing formatting. Have to choose a class.
                           container = my.container,
                           options = my.options,
-                          caption = htmltools::tags$caption(style = 'caption-side: bottom; text-align: center;', caption)
+                          caption = htmltools::tags$caption(style = caption.style, caption)
                           )
 
 
@@ -164,7 +164,7 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
 
 #' \code{AddSignificanceHighlightingToDataTable}
 #'
-#' @description Add red and blue highlighting to a data table conditionally on the values in a 
+#' @description Add red and blue highlighting to a data table conditionally on the values in a
 #' specified column. Used to replicate Q's significance highlighting in the table.
 #'
 #' @param dt An HTML widget DataTable created e.g. by \code{\link{DataTableWithRItemFormat}}
@@ -180,12 +180,12 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
 #' my.df <- data.frame(First = c(1,2,3), Second = c("a", "b", "c"))
 #' my.dt <- DataTableWithRItemFormat(my.df, caption = "A nice table")
 #' my.dt <- AddSignificanceHighlightingToDataTable(my.dt, columns.to.color = "Second", column.to.check = "First", red.value = 1.01, blue.value = 2.99)
-#' 
+#'
 #' @export
 AddSignificanceHighlightingToDataTable <- function(dt, columns.to.color, column.to.check, red.value, blue.value)
 {
-    new.dt <- DT::formatStyle(dt, columns = columns.to.color, 
-                              valueColumns = column.to.check, 
+    new.dt <- DT::formatStyle(dt, columns = columns.to.color,
+                              valueColumns = column.to.check,
                               color = DT::styleInterval(c(red.value, blue.value), c('rgb(255,0,0)', 'rgb(0,0,0)', 'rgb(0,0,255)'))
                               )
     return(new.dt)

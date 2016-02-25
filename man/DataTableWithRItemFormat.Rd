@@ -4,18 +4,28 @@
 \alias{DataTableWithRItemFormat}
 \title{\code{DataTableWithRItemFormat}}
 \usage{
-DataTableWithRItemFormat(dd, caption = NULL, header.alignments = NULL)
+DataTableWithRItemFormat(dd, caption = NULL, header.alignments = NULL,
+  allow.length.change = TRUE, length.menu = c(10, 15, 20),
+  page.length = min(15, nrow(dd)))
 }
 \arguments{
 \item{dd}{The \code{data frame} that you want to show as a widget.}
 
 \item{caption}{Text to be placed beneath the table.}
 
-\item{header.alignments}{A character vector with one element for each column in 
+\item{header.alignments}{A character vector with one element for each column in
 \code{dd} which specifies whether the cells of each column should be left or right
-aligned. Acceptable values are \code{"right"} and \code{"left"}. If you don't 
+aligned. Acceptable values are \code{"right"} and \code{"left"}. If you don't
 specify the alignments then columns that look like text will be left-aligned, and
 columns that look like numbers will be right-aligned.}
+
+\item{allow.length.change}{Boolean value that determines whether or not the user is
+given a menu allowing them to choose the height of the table.}
+
+\item{length.menu}{A vector of integers specifying the options to show in the menu
+of table heights.}
+
+\item{page.length}{An integer specifying the initial height of the table.}
 }
 \description{
 Create an HTML widget DataTable which looks like Q's blue table style.
