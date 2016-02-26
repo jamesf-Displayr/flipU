@@ -7,10 +7,11 @@
 ListToDataFrame(list.of.variables, coerce.to.numeric = FALSE)
 }
 \arguments{
-\item{list.of.variables}{A list containing the variables to combine. The elements of the list should be of class
-numeric, factor, or ordered factor.}
+\item{list.of.variables}{A list containing the variables to combine. The
+elements of the list should be of class numeric, factor, or ordered factor.}
 
-\item{coerce.to.numeric}{A boolean value specifying whether or not factor variables should be coerced to numeric.}
+\item{coerce.to.numeric}{A boolean value specifying whether or not factor
+variables should be coerced to numeric.}
 }
 \description{
 Coerce a list of numeric or factor variables into a data frame.
