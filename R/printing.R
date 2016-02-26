@@ -1,3 +1,6 @@
+# Tags from the htmltools package. Not recognised by check().
+globalVariables(c("style", "thead", "th", "tr"))
+
 #' \code{DataTableWithRItemFormat}
 #'
 #' @description Create an HTML widget DataTable which looks like Q's blue table style.
@@ -164,22 +167,29 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
 
 #' \code{AddSignificanceHighlightingToDataTable}
 #'
-#' @description Add red and blue highlighting to a data table conditionally on the values in a
-#' specified column. Used to replicate Q's significance highlighting in the table.
+#' @description Add red and blue highlighting to a data table conditionally on
+#'   the values in a specified column. Used to replicate Q's significance
+#'   highlighting in the table.
 #'
-#' @param dt An HTML widget DataTable created e.g. by \code{\link{DataTableWithRItemFormat}}
-#' @param columns.to.color A character vector containing the column names of the columns that should be
-#' colored.
-#' @param column.to.check The name of the column whose values will be used to do the coloring.
-#' @param red.value A number specifying the upper bound for values in \code{column.to.check} which will
-#' cause cells in \code{columns.to.color} to be highlighted red. That is, when cells in column.to.check
-#' have a value less than this, cells in columns.to.color will be colored red.
-#' @param blue.value A number specifying the lower bound for coloring cells blue, as above.
+#' @param dt An HTML widget DataTable created e.g. by
+#'   \code{\link{DataTableWithRItemFormat}}
+#' @param columns.to.color A character vector containing the column names of the
+#'   columns that should be colored.
+#' @param column.to.check The name of the column whose values will be used to do
+#'   the coloring.
+#' @param red.value A number specifying the upper bound for values in
+#'   \code{column.to.check} which will cause cells in \code{columns.to.color} to
+#'   be highlighted red. That is, when cells in column.to.check have a value
+#'   less than this, cells in columns.to.color will be colored red.
+#' @param blue.value A number specifying the lower bound for coloring cells
+#'   blue, as above.
 #'
 #' @examples
 #' my.df <- data.frame(First = c(1,2,3), Second = c("a", "b", "c"))
 #' my.dt <- DataTableWithRItemFormat(my.df, caption = "A nice table")
-#' my.dt <- AddSignificanceHighlightingToDataTable(my.dt, columns.to.color = "Second", column.to.check = "First", red.value = 1.01, blue.value = 2.99)
+#' my.dt <- AddSignificanceHighlightingToDataTable(my.dt,
+#'     columns.to.color = "Second", column.to.check = "First",
+#'     red.value = 1.01, blue.value = 2.99)
 #'
 #' @export
 AddSignificanceHighlightingToDataTable <- function(dt, columns.to.color, column.to.check, red.value, blue.value)
