@@ -5,3 +5,6 @@
 inst/doc
 .Rproj.user
 .Rhistory
+
+# testthat artifact
+tests/testthat/Rplots.pdf
