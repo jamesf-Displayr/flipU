@@ -3,6 +3,7 @@
 export(AddSignificanceHighlightingToDataTable)
 export(AdjustDataToReflectWeights)
 export(AllIntegers)
+export(CovarianceAndCorrelationMatrix)
 export(DataTableWithRItemFormat)
 export(FactorToIndicators)
 export(FactorToNumeric)

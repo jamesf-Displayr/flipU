@@ -12,5 +12,6 @@ Imports:
     DT,
     htmltools
 Suggests:
+    flipMultivariates,
     testthat
 RoxygenNote: 5.0.1
