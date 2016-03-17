@@ -31,8 +31,8 @@ test_that("Correlation and covariance matrices are calculated correctly",
     expect_equal(weightedPartialCovarianceMatrix(test.data.1, test.weight, correlation = FALSE)[3,4], 0.220870616976875)
 
     # Compare correlation against 'weights' package
-    all.equal(weightedPartialCovarianceMatrix(test.data.1, test.weight, correlation = TRUE),
-        unname(weights::wtd.cors(test.data.1, weight = test.weight)))
+    expect_equal(weightedPartialCovarianceMatrix(test.data.1, test.weight, correlation = TRUE),
+        weights::wtd.cors(test.data.1, weight = test.weight))
 
     # Weighted Correlation Matrix with Complete Obs Only
     expect_equal(weightedPartialCovarianceMatrix(test.data.2[test.complete.obs, ],
@@ -47,7 +47,7 @@ test_that("Correlation and covariance matrices are calculated correctly",
     # Compare correlation against 'weights' package
     expect_equal(weightedPartialCovarianceMatrix(test.data.2[test.complete.obs, ],
         test.weight[test.complete.obs], correlation = TRUE),
-        unname(weights::wtd.cors(test.data.2[test.complete.obs, ], weight = test.weight[test.complete.obs])))
+        weights::wtd.cors(test.data.2[test.complete.obs, ], weight = test.weight[test.complete.obs]))
 
     # Un-weighted Correlation Matrix with Pairwise
     expect_equal(cor(test.data.1, use = "pairwise.complete.obs")[3,4], 0.237209928184647)

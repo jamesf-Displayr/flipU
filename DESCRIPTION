@@ -13,5 +13,6 @@ Imports:
     htmltools
 Suggests:
     flipMultivariates,
-    testthat
+    testthat,
+    weights
 RoxygenNote: 5.0.1

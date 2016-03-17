@@ -82,7 +82,8 @@ weightedPartialCovarianceMatrix <- function(data, weight, correlation = FALSE)
     }
 
     num.cols <- ncol(data)
-    output.matrix <- matrix(0, nrow = num.cols, ncol = num.cols)
+    output.matrix <- matrix(0, nrow = num.cols, ncol = num.cols,
+        dimnames = list(colnames(data), colnames(data)))
     for (row in 1L:num.cols)
     {
         for (col in row:num.cols)
