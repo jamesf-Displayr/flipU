@@ -26,6 +26,13 @@ globalVariables(c("style", "thead", "th", "tr"))
 #' @export
 DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NULL, allow.length.change = TRUE, length.menu = c(10,15,20), page.length = min(15, nrow(dd)))
 {
+    if (nrow(dd) == 0 || ncol(dd) == 0)
+    {
+        warning("Table is too small to be printed as an HTML Data Table.")
+        print.default(dd)
+        return
+    }
+
     #show.row.names = TRUE
     # Specify the header style information that will be used by datatables to draw the output.
     # For some reason this is handled separately to the style of the cell contents
