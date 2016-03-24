@@ -18,13 +18,20 @@ globalVariables(c("style", "thead", "th", "tr"))
 #' @param length.menu A vector of integers specifying the options to show in the menu
 #' of table heights.
 #' @param page.length An integer specifying the initial height of the table.
+#' @param allow.paging A boolean value to specify whether pagination is turned on.
 #'
 #' @examples
 #' my.df <- data.frame(First = c(1,2,3), Second = c("a", "b", "c"))
 #' my.dt <- DataTableWithRItemFormat(my.df, caption = "A nice table")
 #' my.dt
 #' @export
-DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NULL, allow.length.change = TRUE, length.menu = c(10,15,20), page.length = min(15, nrow(dd)))
+DataTableWithRItemFormat <- function(dd, 
+                                     caption = NULL, 
+                                     header.alignments = NULL, 
+                                     allow.length.change = TRUE, 
+                                     length.menu = c(10,15,20), 
+                                     page.length = min(15, nrow(dd)), 
+                                     allow.paging = TRUE)
 {
     if (nrow(dd) == 0 || ncol(dd) == 0)
     {
@@ -98,6 +105,7 @@ DataTableWithRItemFormat <- function(dd, caption = NULL, header.alignments = NUL
                        lengthChange = allow.length.change,
                        lengthMenu = length.menu,
                        pageLength = page.length,
+                       paging = allow.paging,
                        columnDefs = list(list(targets = column.to.remove, visible = FALSE),
                                          list(targets = " ", className = 'dt-center'),
                                          list(targets = left.align.columns, className = 'dt-left'),

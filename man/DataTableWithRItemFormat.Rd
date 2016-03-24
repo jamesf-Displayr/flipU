@@ -6,7 +6,7 @@
 \usage{
 DataTableWithRItemFormat(dd, caption = NULL, header.alignments = NULL,
   allow.length.change = TRUE, length.menu = c(10, 15, 20),
-  page.length = min(15, nrow(dd)))
+  page.length = min(15, nrow(dd)), allow.paging = TRUE)
 }
 \arguments{
 \item{dd}{The \code{data frame} that you want to show as a widget.}
@@ -26,6 +26,8 @@ given a menu allowing them to choose the height of the table.}
 of table heights.}
 
 \item{page.length}{An integer specifying the initial height of the table.}
+
+\item{allow.paging}{A boolean value to specify whether pagination is turned on.}
 }
 \description{
 Create an HTML widget DataTable which looks like Q's blue table style.
