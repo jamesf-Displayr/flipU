@@ -19,6 +19,8 @@ globalVariables(c("style", "thead", "th", "tr"))
 #' of table heights.
 #' @param page.length An integer specifying the initial height of the table.
 #' @param allow.paging A boolean value to specify whether pagination is turned on.
+#' @param show.info A boolean value to specify whether or not extra info is shown below
+#' the table, including pagination info like "Showing 5 of 10 items".
 #'
 #' @examples
 #' my.df <- data.frame(First = c(1,2,3), Second = c("a", "b", "c"))
@@ -31,7 +33,8 @@ DataTableWithRItemFormat <- function(dd,
                                      allow.length.change = TRUE, 
                                      length.menu = c(10,15,20), 
                                      page.length = min(15, nrow(dd)), 
-                                     allow.paging = TRUE)
+                                     allow.paging = TRUE,
+                                     show.info = TRUE)
 {
     if (nrow(dd) == 0 || ncol(dd) == 0)
     {
@@ -106,6 +109,7 @@ DataTableWithRItemFormat <- function(dd,
                        lengthMenu = length.menu,
                        pageLength = page.length,
                        paging = allow.paging,
+                       info = show.info,
                        columnDefs = list(list(targets = column.to.remove, visible = FALSE),
                                          list(targets = " ", className = 'dt-center'),
                                          list(targets = left.align.columns, className = 'dt-left'),
