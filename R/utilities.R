@@ -19,7 +19,7 @@ IfThen <- function(condition, TRUE.result, FALSE.result)
 #' @param row.names.to.remove A vector of the row labels to remove.
 #' @param column.names.to.remove A vector of the column labels to remove.
 #' @export
-GetTidyTwoDimensionalArray <- function(x, row.names.to.remove, column.names.to.remove)
+GetTidyTwoDimensionalArray <- function(x, row.names.to.remove = NULL, column.names.to.remove = NULL)
 {
     dim.x <- dim(x)
     dim.names <- dimnames(x)
@@ -35,7 +35,7 @@ GetTidyTwoDimensionalArray <- function(x, row.names.to.remove, column.names.to.r
         }
         else
         {
-            stop("Correspondence analysis can only be peformed with a two-dimensional table (i.e., a table with one set of row headings, one set of columns headings, and one statistic in each cell.")
+            stop("This analysis requires a two-dimensional table (i.e., a table with one set of row headings, one set of columns headings, and one statistic in each cell.")
         }
     }
     if (is.null(dim.names))
