@@ -21,7 +21,7 @@ RemoveRowsAndOrColumns <- function(x,
                                    row.names.to.remove = c("NET", "Total", "SUM"),
                                    column.names.to.remove = c("NET", "Total", "SUM"))
 {
-    x[!rownames(x) %in% row.names.to.remove, !colnames(x) %in% column.names.to.remove ]
+    x[!rownames(x) %in% row.names.to.remove, !colnames(x) %in% column.names.to.remove, drop = FALSE]
 }
 
 #' \code{FactorsToIndicators}
