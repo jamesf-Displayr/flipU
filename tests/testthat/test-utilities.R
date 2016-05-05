@@ -1,6 +1,5 @@
 library(testthat)
 library(flipU)
-
 context("Utilities")
 
 test_that("ListToDataFrame works as expected",

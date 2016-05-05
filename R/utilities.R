@@ -6,9 +6,7 @@
 #' @export
 IfThen <- function(condition, TRUE.result, FALSE.result)
 {
-    if(condition)
-        return(TRUE.result);
-    return(FALSE.result);
+    stop("IfThen is stupid. It does nothing other than a normal inline if statement in R, so please remove it from your code.")
 }
 
 
