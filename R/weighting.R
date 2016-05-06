@@ -37,9 +37,27 @@ AdjustDataToReflectWeights <- function(data, weights, seed = 123)
 }
 
 
+
+
+# #' Q23 and Weights from Phone.sav
+# #'
+# #' 25 variables from a 5-point scale. Extra missing data has been added at random.
+# #' This makes up about 20% of the values. This is to test PCA and Factor analysis.
+# #'
+# #' @format A list containing:
+# #' \describe{
+# #'   \item{data.set}{25 variables from q23}
+# #'   \item{weight}{A vector of weights}
+# #' }
+# "pcaPhoneTestData"
+
+
+
+# Compute a matrix containing the pairwise weighted correlations between each column in
+# 'data'.
 weightedPartialCovarianceMatrix <- function(data, weight, correlation = FALSE)
 {
-    weightedPartialCovariance <- function(numeric1, numeric2, input.weight, correlation = FALSE)
+    .weightedPartialCovariance <- function(numeric1, numeric2, input.weight, correlation = FALSE)
     {
         Sumxy <- 0.0
         SumY <- 0.0
@@ -88,7 +106,7 @@ weightedPartialCovarianceMatrix <- function(data, weight, correlation = FALSE)
     {
         for (col in row:num.cols)
         {
-            output.matrix[row, col] <- weightedPartialCovariance(numeric1 = data[, row],
+            output.matrix[row, col] <- .weightedPartialCovariance(numeric1 = data[, row],
                 numeric2 = data[, col],
                 input.weight = weight,
                 correlation = correlation)
