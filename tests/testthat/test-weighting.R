@@ -23,3 +23,25 @@ test_that("Creating bootrapped sample with weights", {
     expect_that(sum(d), equals(150))
     expect_warning(AdjustDataToReflectWeights(dat[rep(1:2, 50), ], runif(100)))
 })
+
+
+test_that("Mean is correct.", {
+    # Small sample.
+    expect_that(Mean(1:10), equals(5.5))
+    expect_that(Mean(1:10, 1:10), equals(7))
+    expect_that(Mean(c(100, 1:10, NA), c(NA, 1:10, 100)), equals(7))
+    expect_that(Mean(cbind(1:10,1:10), 1:10)[2], equals(7))
+})
+
+
+
+test_that("StandardDeviation is correct.", {
+    # Small sample.
+    expect_that(StandardDeviation(1:10), equals(StandardDeviation(1:10, rep(1, 10))))
+    expect_that(StandardDeviation(1:10, 1:10), equals(StandardDeviation(rep(1:10, 1:10))))
+    expect_that(StandardDeviation(1:10, 1:10), equals(StandardDeviation(c(100, 1:10, NA), c(NA, 1:10, 100))))
+    expect_that(StandardDeviation(cbind(1:10, 1), 1:10)[1], equals(StandardDeviation(rep(1:10, 1:10))))
+    expect_that(Mean(c(100, 1:10, NA), c(NA, 1:10, 100)), equals(7))
+    expect_that(Mean(cbind(1:10,1:10), 1:10)[2], equals(7))
+})
+
