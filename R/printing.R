@@ -27,12 +27,12 @@ globalVariables(c("style", "thead", "th", "tr"))
 #' my.dt <- DataTableWithRItemFormat(my.df, caption = "A nice table")
 #' my.dt
 #' @export
-DataTableWithRItemFormat <- function(dd, 
-                                     caption = NULL, 
-                                     header.alignments = NULL, 
-                                     allow.length.change = TRUE, 
-                                     length.menu = c(10,15,20), 
-                                     page.length = min(15, nrow(dd)), 
+DataTableWithRItemFormat <- function(dd,
+                                     caption = NULL,
+                                     header.alignments = NULL,
+                                     allow.length.change = TRUE,
+                                     length.menu = c(10,15,20),
+                                     page.length = min(15, nrow(dd)),
                                      allow.paging = TRUE,
                                      show.info = TRUE)
 {
@@ -121,8 +121,9 @@ DataTableWithRItemFormat <- function(dd,
                           class = 'hover', # Built-in class with least amount of existing formatting. Have to choose a class.
                           container = my.container,
                           options = my.options,
-                          caption = htmltools::tags$caption(style = caption.style, caption)
-                          )
+                          caption = htmltools::tags$caption(style = caption.style, caption),
+                          width = '100%',
+                          fillContainer = getOption('DT.fillContainer', FALSE))
 
 
     # Format cells in main table
