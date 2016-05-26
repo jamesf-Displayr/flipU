@@ -17,6 +17,6 @@ test.summary <- structure(c(-2.12354266886328, 0.35430227088273, 0.2773200948597
                                   c("(Intercept)", "Fees", "Interest", "Phone", "Branch", "Online",
                                     "ATM"), c("Estimate", "Std. Error", "t value", "Pr(>|t|)"
                                     )))
-expect_that(DataTableWithRItemFormat(as.data.frame(test.summary), caption = "A nice summary of regression coefficients.", header.alignments = c("left", "right", "left", "right")), not(throws_error()))
+expect_error(DataTableWithRItemFormat(as.data.frame(test.summary), caption = "A nice summary of regression coefficients.", header.alignments = c("left", "right", "left", "right")), NA)
 test.dt <- DataTableWithRItemFormat(as.data.frame(test.summary))
-expect_that(AddSignificanceHighlightingToDataTable(test.dt, columns.to.color = "Estimate", column.to.check = "t value", red.value = -1.96, blue.value = 1.96), not(throws_error()))
+expect_error(AddSignificanceHighlightingToDataTable(test.dt, columns.to.color = "Estimate", column.to.check = "t value", red.value = -1.96, blue.value = 1.96), NA)

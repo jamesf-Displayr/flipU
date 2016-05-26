@@ -12,7 +12,8 @@ Imports:
     DT,
     htmltools
 Suggests:
-    flipMultivariates,
     testthat,
-    weights
+    weights,
+    flipImputation,
+    flipData
 RoxygenNote: 5.0.1

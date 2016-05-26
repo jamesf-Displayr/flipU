@@ -27,12 +27,12 @@ globalVariables(c("style", "thead", "th", "tr"))
 #' my.dt <- DataTableWithRItemFormat(my.df, caption = "A nice table")
 #' my.dt
 #' @export
-DataTableWithRItemFormat <- function(dd, 
-                                     caption = NULL, 
-                                     header.alignments = NULL, 
-                                     allow.length.change = TRUE, 
-                                     length.menu = c(10,15,20), 
-                                     page.length = min(15, nrow(dd)), 
+DataTableWithRItemFormat <- function(dd,
+                                     caption = NULL,
+                                     header.alignments = NULL,
+                                     allow.length.change = TRUE,
+                                     length.menu = c(10,15,20),
+                                     page.length = min(15, nrow(dd)),
                                      allow.paging = TRUE,
                                      show.info = TRUE)
 {
@@ -219,4 +219,113 @@ AddSignificanceHighlightingToDataTable <- function(dt, columns.to.color, column.
                               )
     return(new.dt)
 
+}
+
+
+
+# Create an HTML widget data table (package DT) from the coefficients
+# table in a regression summary.
+createRegressionDataTable <- function(x, p.cutoff, caption = NULL, coeff.digits = 2,
+                                      p.digits = 2, coefficient.indices = 1:2,
+                                      test.index = 3, p.index = 4,
+                                      eps.p = 0.001)
+{
+  # Given a table of coefficients from a summary of a regression
+  # figure out which test has been used and which column the test
+  # statistics are found in.
+  .findTestInCoefficientTable <- function(coefficient.table) {
+    col.names <- colnames(coefficient.table)
+    t.col <- which(col.names == "t value")
+    z.col <- which(col.names == "z value")
+    if (length(t.col) == 0 && length(z.col) == 0)
+    {
+      test.type <- "none"
+      test.column <- NULL
+
+    } else if (length(t.col) > 0 && length(z.col) > 0 || length(t.col) > 1 || length(z.col) > 1) {
+      stop("Ambiguous statistical testing information in coefficients table.")
+    } else if (length(t.col) > 0) {
+      test.type <- "t"
+      test.column <- t.col
+    } else {
+      test.type <- "z"
+      test.column <- z.col
+    }
+
+    return(list(test.type = test.type, test.column = test.column))
+  }
+
+  # Create a formatted array of regression coefficient information that can be passed to an HTMLwidget
+  # DataTable.
+  .formatRegressionCoefficientMatrix <- function (x, coeff.digits = 2,
+                                                  p.digits = 2, coefficient.indices = 1:2,
+                                                  test.index = 3, p.index = 4,
+                                                  eps.p = 0.001)
+  {
+    d <- dim(x)
+    num.cols <- d[2]
+
+    coefficients <- data.matrix(x)
+
+
+    tidied.coefficients <- array("", dim = d, dimnames = dimnames(coefficients))
+
+    na.values <- is.na(coefficients)
+
+    normal.indices <- c(coefficient.indices, test.index)
+    tidied.coefficients[,normal.indices] <- format(round(coefficients[, normal.indices], digits = coeff.digits), digits = coeff.digits)
+    tidied.coefficients[,p.index] <- format.pval(coefficients[, p.index], digits = p.digits, eps = eps.p)
+
+    # Print any NA values
+    if (any(na.values))
+      tidied.coefficients[na.values] <- "NA"
+
+    return(as.data.frame(tidied.coefficients))
+  }
+
+
+
+  # Make a pretty table with a caption
+  coefs <- x$summary$coefficients
+  # Ordered Logit tables don't come with a p-value column
+  # so calculate the p's from the
+  if (x$type == "Ordered Logit")
+  {
+    ps = 2*pt(-abs(coefs[, test.index]), df = x$summary$df.residual)
+    coefs = cbind(coefs, ps)
+  }
+
+  pretty.coefs <- .formatRegressionCoefficientMatrix(coefs, coeff.digits,
+                                                     p.digits, coefficient.indices,
+                                                     test.index, p.index,
+                                                     eps.p)
+  pretty.coefs <- as.data.frame(pretty.coefs, stringsAsFactors = FALSE)
+
+  caption <- paste0(caption, "Results highlighted when p <= " , p.cutoff)
+
+
+  dt <- flipU::DataTableWithRItemFormat(pretty.coefs,
+                                        caption = caption,
+                                        header.alignments = rep("right", ncol(pretty.coefs)),
+                                        page.length = nrow(pretty.coefs),
+                                        allow.paging = FALSE,
+                                        show.info = FALSE)
+
+
+  # Highlight significant coefficients
+  test.info <- .findTestInCoefficientTable(coefs)
+  if (test.info$test.type == "t")
+  {
+    t.val <- qt(p.cutoff / 2, df = df.residual(x))
+    dt <- flipU::AddSignificanceHighlightingToDataTable(dt, columns.to.color = 1,
+                                                        column.to.check = "t value",#test.info$test.column,
+                                                        red.value = t.val, blue.value = -1L * t.val)
+  } else if (test.info$test.type == "z") {
+    z.val <- qnorm(p.cutoff / 2)
+    dt <- flipU::AddSignificanceHighlightingToDataTable(dt, columns.to.color = 1,
+                                                        column.to.check = test.info$test.column,
+                                                        red.value = z.val, blue.value = -1L * z.val)
+  }
+
+  return(dt)
 }

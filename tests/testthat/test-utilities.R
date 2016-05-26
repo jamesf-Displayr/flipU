@@ -35,14 +35,14 @@ dimnames(x.with.labels) <- list(Brand=c('Coke','V',"Red\nBull","Lift\nPlus",'Die
 
 test_that("GetTidyTwoDimensionalArray",
           {
-    expect_that(GetTidyTwoDimensionalArray(x.with.labels, "NET", "NET"), not(throws_error()))
-    expect_that(GetTidyTwoDimensionalArray(x), not(throws_error()))
+    expect_error(GetTidyTwoDimensionalArray(x.with.labels, "NET", "NET"),NA)
+    expect_error(GetTidyTwoDimensionalArray(x), NA)
     # 3D array with no names
     z <- array(NA, c(8,11,2))
     z[,,1] <- x
-    expect_that(GetTidyTwoDimensionalArray(z), throws_error())
+    expect_error(GetTidyTwoDimensionalArray(z))
     dimnames(z) <- list(dimnames(x.with.labels)[[1]], dimnames(x.with.labels)[[2]], 1:2)
-    expect_that(suppressWarnings(GetTidyTwoDimensionalArray(z)), not(throws_error()))
+    expect_error(suppressWarnings(GetTidyTwoDimensionalArray(z)), NA)
 })
 
 

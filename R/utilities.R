@@ -1,16 +1,3 @@
-#'  \code{IfThen}
-#' @description If else statment as a single line.
-#' @param condition A logical expression.
-#' @param TRUE.result The object to be returned if \code{condition} is \code{TRUE}.
-#' @param FALSE.result The object to be returned if \code{condition} is \code{FALSE}.
-#' @export
-IfThen <- function(condition, TRUE.result, FALSE.result)
-{
-    stop("IfThen is stupid. It does nothing other than a normal inline if statement in R, so please remove it from your code.")
-}
-
-
-
 #' \code{GetTidyTwoDimensionalArray}
 #' @description Checks that an array is two dimensional and tidies if appropriate (assuming it is a Q table).
 #' @param x The data that is being analyzed
@@ -68,7 +55,7 @@ RemoveRowsAndOrColumns <- function(x,
 #' @export
 FactorToIndicators <- function(variable, variable.name = deparse(substitute(variable)))
 {
-    result <- model.matrix( ~ variable - 1)
+    result <- stats::model.matrix( ~ variable - 1)
     colnames(result) <- paste0(variable.name, ":", levels(variable))
     result
 }
@@ -83,7 +70,7 @@ OrderedToNumeric <- function(x)
     {
         return(unclass(x))
     }
-    return(model.matrix( ~ x - 1))
+    return(stats::model.matrix( ~ x - 1))
 }
 
 #' \code{FactorToNumeric}

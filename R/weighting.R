@@ -158,11 +158,11 @@ CovarianceAndCorrelationMatrix <- function(data,
 
         if (use.correlation)
         {
-            input.matrix <- cor(data, use = use.string)
+            input.matrix <- stats::cor(data, use = use.string)
         }
         else
         {
-            input.matrix <- cov(data, use = use.string)
+            input.matrix <- stats::cov(data, use = use.string)
         }
     }
     else
@@ -191,7 +191,7 @@ Variance <- function(x, weights = NULL, method = "SPSS")
     if (!is.matrix(x))
         x <- as.matrix(x)
     if (is.null(weights))
-        return(apply(x, 2, FUN = var, na.rm = TRUE))
+        return(apply(x, 2, FUN = stats::var, na.rm = TRUE))
     if (method != "SPSS")
         stop("Only SPSS supported in this function.")
     Ws <- matrix(weights, nrow(x), ncol(x))
