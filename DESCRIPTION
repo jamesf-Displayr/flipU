@@ -6,14 +6,7 @@ Date: 2015-12-22
 Author: Numbers International Pty Ltd
 Maintainer: Tim Bock <tim.bock@numbers.net.au>
 Description: Avoid having multiple utility functions in different packages.
-License: MIT + file LICENSE
+License: GPL-3
 LazyData: TRUE
-Imports:
-    DT,
-    htmltools
-Suggests:
-    testthat,
-    weights,
-    flipImputation,
-    flipData
+Suggests: testthat
 RoxygenNote: 5.0.1
