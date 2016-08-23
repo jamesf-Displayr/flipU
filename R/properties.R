@@ -8,7 +8,6 @@ AllIntegers <- function(x)
     all(x %% 1 == 0)
 }
 
-
 #' \code{AllVariablesNames}
 #' @description Find the names of the variables (including those in dataframes) in a formula.
 #' @param formula A \code{\link{formula}}.
@@ -19,6 +18,20 @@ AllVariablesNames <- function(formula)
     var.names <- all.vars(formula(gsub("$", rand.str, deparse(formula), fixed = TRUE)))
     sapply(var.names, function(x) gsub(rand.str, "$", x, fixed = TRUE), USE.NAMES = FALSE)
 }
+
+#' \code{CopyAttributes}
+#' @description Copies the "label" attribute for each for variable in a \code{\link{data.frame}}.
+#' @param data.with.attributes A \code{\link{data.frame}}.
+#' @param data.without.attributes A \code{\link{data.frame}}.
+#' @return A \code{\link{data.frame}}.
+#' @export
+CopyAttributes <- function(data.with.attributes, data.without.attributes)
+{
+    for (i in names(imputed.data))
+        attr(data.without.attributes[, i], "label") <- attr(data.with.attributes[, i], "label")
+    data.without.attributes
+}
+
 
 
 #' \code{OutcomeName}
