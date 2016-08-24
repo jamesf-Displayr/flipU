@@ -27,7 +27,7 @@ AllVariablesNames <- function(formula)
 #' @export
 CopyAttributes <- function(data.with.attributes, data.without.attributes)
 {
-    for (i in names(imputed.data))
+    for (i in names(data.without.attributes))
         attr(data.without.attributes[, i], "label") <- attr(data.with.attributes[, i], "label")
     data.without.attributes
 }
