@@ -8,5 +8,7 @@ Maintainer: Tim Bock <tim.bock@numbers.net.au>
 Description: Avoid having multiple utility functions in different packages.
 License: GPL-3
 LazyData: TRUE
-Suggests: testthat
+Imports: testthat
+Suggests:
+    flipRegression
 RoxygenNote: 5.0.1
