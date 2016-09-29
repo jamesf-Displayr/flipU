@@ -2,7 +2,18 @@
 % Please edit documentation in R/properties.R
 \name{AnyNegative}
 \alias{AnyNegative}
-\title{\code{AnyNegative}}
+\title{#' \code{UnclassIfNecessary}
+#' @description Unclasses a variable if it is a factor. Otherwise, returns x.
+#' @param x A vector.
+#' @return A vector
+#' @export
+UnclassIfNecessary <- function(x)
+{
+    if(is.factor(x))
+        return(unclass(x));
+    return(x);
+}
+\code{AnyNegative}}
 \usage{
 AnyNegative(x)
 }
