@@ -68,17 +68,17 @@ PrintDetails <- function(x)
     cat("\n")
 }
 
-#' \code{UnclassIfNecessary}
-#' @description Unclasses a variable if it is a factor. Otherwise, returns x.
-#' @param x A vector.
-#' @return A vector
-#' @export
-UnclassIfNecessary <- function(x)
-{
-    if(is.factor(x))
-        return(unclass(x));
-    return(x);
-}
+#' #' \code{UnclassIfNecessary}
+#' #' @description Unclasses a variable if it is a factor. Otherwise, returns x.
+#' #' @param x A vector.
+#' #' @return A vector
+#' #' @export
+#' UnclassIfNecessary <- function(x)
+#' {
+#'     if(is.factor(x))
+#'         return(unclass(x));
+#'     return(x);
+#' }
 
 #' \code{AnyNegative}
 #' @description The values contain a negative value.
