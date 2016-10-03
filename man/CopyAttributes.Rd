@@ -4,17 +4,17 @@
 \alias{CopyAttributes}
 \title{\code{CopyAttributes}}
 \usage{
-CopyAttributes(data.with.attributes, data.without.attributes)
+CopyAttributes(data.without.attributes, data.with.attributes)
 }
 \arguments{
-\item{data.with.attributes}{A \code{\link{data.frame}}.}
-
 \item{data.without.attributes}{A \code{\link{data.frame}}.}
+
+\item{data.with.attributes}{A \code{\link{data.frame}}.}
 }
 \value{
 A \code{\link{data.frame}}.
 }
 \description{
-Copies the "label" attribute for each for variable in a \code{\link{data.frame}}.
+Copies the "label", "name", and "qestion" attributse for each for variable in a \code{\link{data.frame}}.
 }
 

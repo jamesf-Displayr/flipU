@@ -17,3 +17,15 @@ test_that("AnyNA",
     expect_that(AnyNA(dat[3:20, ], ~ a + b), is_false())
     expect_that(AnyNA(dat[3:20, ], ~ a + b), is_false())
 })
+
+test_that("CopyAttributes",
+          {
+              z <- 1:10
+              attr(z, "question") <- "Question"
+              q <- 2
+              expect_equal(attr(CopyAttributes(q, z), "question"), "Question")
+
+              df <- data.frame(a = 1:10, b = z)
+              df1 <- data.frame(a = 1:10, b = 1:10)
+              expect_equal(attr(CopyAttributes(df1, df)$b, "question"), "Question")
+          })

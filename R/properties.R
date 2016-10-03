@@ -20,15 +20,21 @@ AllVariablesNames <- function(formula)
 }
 
 #' \code{CopyAttributes}
-#' @description Copies the "label" attribute for each for variable in a \code{\link{data.frame}}.
-#' @param data.with.attributes A \code{\link{data.frame}}.
+#' @description Copies the "label", "name", and "qestion" attributse for each for variable in a \code{\link{data.frame}}.
 #' @param data.without.attributes A \code{\link{data.frame}}.
+#' @param data.with.attributes A \code{\link{data.frame}}.
 #' @return A \code{\link{data.frame}}.
 #' @export
-CopyAttributes <- function(data.with.attributes, data.without.attributes)
+CopyAttributes <- function(data.without.attributes, data.with.attributes)
 {
-    for (i in names(data.without.attributes))
-        attributes(data.without.attributes[, i]) <- attributes(data.with.attributes[, i])
+    if (is.list(data.without.attributes))
+    {
+        for (i in seq_along(data.without.attributes))
+            data.without.attributes[[i]] <- CopyAttributes(data.without.attributes[[i]], data.with.attributes[[i]])
+        return(data.without.attributes)
+    }
+    for (a in c("name", "label", "question"))
+        attr(data.without.attributes, a) <- attr(data.with.attributes, a)
     data.without.attributes
 }
 
