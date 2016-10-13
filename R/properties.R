@@ -14,33 +14,44 @@ AllIntegers <- function(x)
 #' @export
 AllVariablesNames <- function(formula)
 {
-    dollar.placeholder <- "wPpJPcPZGeUTPe2j"
-    backtick.placeholder <- "k54UQuVJqPDA32Oe"
-    space.placeholder <- "IeJkGhbMRbBLmLpK"
-    formula.str <- deparse(formula)
+    .randomStr <- function(n.characters = 16)
+    {
+        paste0(sample(c(letters, LETTERS), n.characters, replace = TRUE), collapse = "")
+    }
+
+    dollar.placeholder <- .randomStr()
+    replaced.text <- list()
+    replaced.text[[dollar.placeholder]] <- "$"
+
+    formula.str <- paste0(deparse(formula), collapse = "")
     new.str <- ""
     inside.backticks <- FALSE
+    backtick.start <- NA
     for (i in 1:nchar(formula.str))
     {
         ch <- substr(formula.str, i, i)
         if (ch == "$")
-            replacement <- dollar.placeholder
+            new.str <- paste0(new.str, dollar.placeholder)
         else if (ch == "`")
         {
+            if (inside.backticks)
+            {
+                ph <- .randomStr()
+                replaced.text[[ph]] <- substr(formula.str, backtick.start, i)
+                new.str <- paste0(new.str, ph)
+            }
+            else
+                backtick.start <- i
             inside.backticks <- !inside.backticks
-            replacement <- backtick.placeholder
         }
-        else if (ch == " " && inside.backticks)
-            replacement <- space.placeholder
-        else
-            replacement <- ch
-        new.str <- paste0(new.str, replacement)
+        else if (!inside.backticks)
+            new.str <- paste0(new.str, ch)
     }
     var.names <- all.vars(formula(new.str))
     sapply(var.names, function(x) {
-        s <- gsub(dollar.placeholder, "$", x, fixed = TRUE)
-        s <- gsub(backtick.placeholder, "`", s, fixed = TRUE)
-        gsub(space.placeholder, " ", s, fixed = TRUE)
+        for (nm in names(replaced.text))
+            x <- gsub(nm, replaced.text[[nm]], x, fixed = TRUE)
+        x
     }, USE.NAMES = FALSE)
 }
 
