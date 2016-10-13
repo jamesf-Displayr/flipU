@@ -14,9 +14,34 @@ AllIntegers <- function(x)
 #' @export
 AllVariablesNames <- function(formula)
 {
-    rand.str <- "wPpJPcPZGeUTPe2j"
-    var.names <- all.vars(formula(gsub("$", rand.str, deparse(formula), fixed = TRUE)))
-    sapply(var.names, function(x) gsub(rand.str, "$", x, fixed = TRUE), USE.NAMES = FALSE)
+    dollar.placeholder <- "wPpJPcPZGeUTPe2j"
+    backtick.placeholder <- "k54UQuVJqPDA32Oe"
+    space.placeholder <- "IeJkGhbMRbBLmLpK"
+    formula.str <- deparse(formula)
+    new.str <- ""
+    inside.backticks <- FALSE
+    for (i in 1:nchar(formula.str))
+    {
+        ch <- substr(formula.str, i, i)
+        if (ch == "$")
+            replacement <- dollar.placeholder
+        else if (ch == "`")
+        {
+            inside.backticks <- !inside.backticks
+            replacement <- backtick.placeholder
+        }
+        else if (ch == " " && inside.backticks)
+            replacement <- space.placeholder
+        else
+            replacement <- ch
+        new.str <- paste0(new.str, replacement)
+    }
+    var.names <- all.vars(formula(new.str))
+    sapply(var.names, function(x) {
+        s <- gsub(dollar.placeholder, "$", x, fixed = TRUE)
+        s <- gsub(backtick.placeholder, "`", s, fixed = TRUE)
+        gsub(space.placeholder, " ", s, fixed = TRUE)
+    }, USE.NAMES = FALSE)
 }
 
 #' \code{CopyAttributes}
