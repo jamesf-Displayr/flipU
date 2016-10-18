@@ -140,6 +140,8 @@ AnyNegative <- function(x)
 IsCount <- function(x) {
     if(is.factor(x))
         return(FALSE)
+    else if (is.logical(x))
+        return (FALSE)
     if(!is.numeric(x)) {
         if (!is.character(x))
             x <- x$type
