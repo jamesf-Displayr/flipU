@@ -16,7 +16,7 @@ r_github_packages: hadley/devtools#1263
 
 script:
   - R CMD build --no-manual --no-build-vignettes --no-resave-data .
-  - Rscript -e 'require(devtools); install_github("flipRegression")'
+  - sudo Rscript -e 'require(devtools); install_github("flipRegression")'
   - R CMD check --as-cran --no-manual --no-build-vignettes *.tar.gz
 
 notifications:
