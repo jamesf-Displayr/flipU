@@ -1,11 +1,10 @@
 Package: flipU
 Type: Package
-Title: Utilities for Use in flip Packages
+Title: Utilities used in flip Packages
 Version: 0.1
-Date: 2015-12-22
-Author: Numbers International Pty Ltd
-Maintainer: Tim Bock <tim.bock@numbers.net.au>
-Description: Avoid having multiple utility functions in different packages.
+Author: Displayr
+Maintainer: Displayr <opensource@displayr.com>
+Description: Utility functions used across multiple flip packages.
 License: GPL-3
 LazyData: TRUE
 Imports: testthat
