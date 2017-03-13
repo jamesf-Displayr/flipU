@@ -29,3 +29,7 @@ test_that("CopyAttributes",
               df1 <- data.frame(a = 1:10, b = 1:10)
               expect_equal(attr(CopyAttributes(df1, df)$b, "question"), "Question")
           })
+
+test_that("AllVariablesNames", {
+    expect_equal(AllVariablesNames(`Cola.sav$Variables$Q2` ~ Q3), c("`Cola.sav$Variables$Q2`", "Q3"))
+})
