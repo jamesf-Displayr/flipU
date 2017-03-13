@@ -1,12 +1,8 @@
 context("warnings")
 
-test_that("Heteroskedasticity",
-          {
-              library(flipRegression)
-              y  <- 1:100 + .001
-              x <- rnorm(100, y, y)
-              ExpectWarning(Regression(y ~ x, robust.se = FALSE), "Breusch")
-              ExpectNoWarning(Regression(y ~ x, robust.se = FALSE), "zzBreusch")
-              ExpectNoWarning(Regression(y ~ x, robust.se = TRUE), "Breusch")
-
-          })
+test_that("Warnings",
+{
+    ExpectWarning(warning("we have a problem"), "problem")
+    ExpectNoWarning(warning("we have a problem"), "issue")
+    ExpectNoWarning(message("this is just a message, not a warning"), "this")
+})
