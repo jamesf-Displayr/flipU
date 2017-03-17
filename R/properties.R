@@ -20,15 +20,12 @@ AllVariablesNames <- function(formula)
     }
 
     dollar.placeholder <- .randomStr()
-    backslash.placeholder <- .randomStr()
     replaced.text <- list()
     replaced.text[[dollar.placeholder]] <- "$"
-    replaced.text[[backslash.placeholder]] <- ""
 
     formula.str <- paste0(deparse(formula), collapse = "")
     new.str <- ""
     inside.backticks <- FALSE
-    preceded.by.backslash <- FALSE
     backtick.start <- NA
     # We need to replace parts of the formula with placeholders in order to use all.vars()
     for (i in 1:nchar(formula.str))
@@ -36,12 +33,7 @@ AllVariablesNames <- function(formula)
         ch <- substr(formula.str, i, i)
         if (ch == "$" && !inside.backticks)
             new.str <- paste0(new.str, dollar.placeholder)
-        else if (ch == "\\")
-        {
-            new.str <- paste0(new.str, backslash.placeholder)
-            preceded.by.backslash <- TRUE
-        }
-        else if (ch == "`" && !preceded.by.backslash)
+        else if (ch == "`")
         {
             if (inside.backticks)
             {
@@ -55,9 +47,6 @@ AllVariablesNames <- function(formula)
         }
         else if (!inside.backticks)
             new.str <- paste0(new.str, ch)
-
-        if (ch != "\\")
-            preceded.by.backslash = FALSE
     }
 
     var.names <- all.vars(formula(new.str))
