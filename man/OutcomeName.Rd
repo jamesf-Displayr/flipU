@@ -15,4 +15,3 @@ character.
 \description{
 Find the name of the outcome variable.
 }
-

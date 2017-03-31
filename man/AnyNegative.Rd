@@ -26,4 +26,3 @@ logical.
 \description{
 The values contain a negative value.
 }
-

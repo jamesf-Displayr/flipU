@@ -17,4 +17,3 @@ A vector of data.
 \description{
 Returns the outcome variable from a model.
 }
-

@@ -15,6 +15,6 @@ CopyAttributes(data.without.attributes, data.with.attributes)
 A \code{\link{data.frame}}.
 }
 \description{
-Copies the "label", "name", and "qestion" attributse for each for variable in a \code{\link{data.frame}}.
+Copies the "label", "name", "question" and "questiontype" attributes
+for each for variable in a \code{\link{data.frame}}.
 }
-

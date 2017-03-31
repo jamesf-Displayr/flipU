@@ -15,4 +15,3 @@ logical.
 \description{
 Checks of data, or, a model description, counts or represents counts.
 }
-

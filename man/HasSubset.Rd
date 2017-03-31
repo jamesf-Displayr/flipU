@@ -15,4 +15,3 @@ true if the subset contains information
 \description{
 Checks that the subset contains data.
 }
-

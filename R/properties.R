@@ -60,7 +60,8 @@ AllVariablesNames <- function(formula)
 }
 
 #' \code{CopyAttributes}
-#' @description Copies the "label", "name", and "qestion" attributse for each for variable in a \code{\link{data.frame}}.
+#' @description Copies the "label", "name", "question" and "questiontype" attributes
+#' for each for variable in a \code{\link{data.frame}}.
 #' @param data.without.attributes A \code{\link{data.frame}}.
 #' @param data.with.attributes A \code{\link{data.frame}}.
 #' @return A \code{\link{data.frame}}.
@@ -73,7 +74,9 @@ CopyAttributes <- function(data.without.attributes, data.with.attributes)
             data.without.attributes[[i]] <- CopyAttributes(data.without.attributes[[i]], data.with.attributes[[i]])
         return(data.without.attributes)
     }
-    for (a in c("name", "label", "question"))
+    # Attention: the vector of attribute names below should be kept up to date
+    # to match the attributes being assigned to Q variables.
+    for (a in c("name", "label", "question", "questiontype"))
         attr(data.without.attributes, a) <- attr(data.with.attributes, a)
     data.without.attributes
 }

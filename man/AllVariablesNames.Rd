@@ -12,4 +12,3 @@ AllVariablesNames(formula)
 \description{
 Find the names of the variables (including those in dataframes) in a formula.
 }
-

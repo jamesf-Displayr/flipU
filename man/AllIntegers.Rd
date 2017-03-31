@@ -15,4 +15,3 @@ logical.
 \description{
 that all items in a variable are integers.
 }
-

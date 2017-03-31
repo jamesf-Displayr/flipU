@@ -14,4 +14,3 @@ ExpectNoWarning(my.function, string)
 \description{
 Checks to see if the printing of an object does not cause a warning to appear.
 }
-

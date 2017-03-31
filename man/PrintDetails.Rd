@@ -13,4 +13,3 @@ PrintDetails(x)
 A print function for error checking.
 Prints its name and a \code{\link{summary}}.
 }
-
