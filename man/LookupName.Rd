@@ -13,7 +13,8 @@ LookupName(value, dictionary)
 
 \item{details}{Returns the name of the element in a vector corresponding to the \code{value}.
 Where the vector is un-named, its index is
-returned. Where the value appears multiple times a warning is provided.}
+returned. Where the value appears multiple times a warning is provided. Returns a \code{NULL} if
+the value is not found.}
 }
 \description{
 LookupName

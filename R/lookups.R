@@ -9,6 +9,8 @@
 #' @export
 LookupName <- function(value, dictionary)
 {
+    if (is.list(dictionary))
+        return(sapply(dictionary, function(x) LookupName(value = value, x)))
     if (is.null(names(dictionary)))
         names(dictionary) <- 1:length(dictionary)
     matches <- dictionary %in% value
