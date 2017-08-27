@@ -9,13 +9,14 @@ LookupName(value, dictionary)
 \arguments{
 \item{value}{The value to be look uped in a \code{dictionary}.}
 
-\item{dictionary}{A \code{\link{vector}} of values.}
-
-\item{details}{Returns the name of the element in a vector corresponding to the \code{value}.
-Where the vector is un-named, its index is
-returned. Where the value appears multiple times a warning is provided. Returns a \code{NULL} if
-the value is not found.}
+\item{dictionary}{A \code{\link{vector}} of values or a list}
 }
 \description{
 LookupName
+}
+\details{
+Returns the name of the element in a vector corresponding to the \code{value}.
+Where the vector is un-named, its index is
+returned. Where the value appears multiple times a warning is provided. Returns a \code{NULL} if
+the value is not found.
 }

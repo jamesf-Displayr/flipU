@@ -1,8 +1,8 @@
 #' LookupName
 #'
 #' @param value The value to be look uped in a \code{dictionary}.
-#' @param dictionary A \code{\link{vector}} of values.
-#' @param details Returns the name of the element in a vector corresponding to the \code{value}.
+#' @param dictionary A \code{\link{vector}} of values or a list
+#' @details Returns the name of the element in a vector corresponding to the \code{value}.
 #' Where the vector is un-named, its index is
 #' returned. Where the value appears multiple times a warning is provided. Returns a \code{NULL} if
 #' the value is not found.
@@ -10,7 +10,7 @@
 LookupName <- function(value, dictionary)
 {
     if (is.list(dictionary))
-        return(sapply(dictionary, function(x) LookupName(value = value, x)))
+        dictionary <- unlist(dictionary)
     if (is.null(names(dictionary)))
         names(dictionary) <- 1:length(dictionary)
     matches <- dictionary %in% value
