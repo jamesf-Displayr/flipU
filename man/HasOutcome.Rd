@@ -13,5 +13,5 @@ HasOutcome(formula)
 logical
 }
 \description{
-Checking if the formula contains an outcome (varib)i.e., dependent variable).
+Checking if the formula contains an outcome i.e., dependent variable).
 }

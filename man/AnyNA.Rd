@@ -15,5 +15,5 @@ AnyNA(data, formula = NULL)
 logical.
 }
 \description{
-Checks to see if there are any NAs in a data frame.0.
+Checks to see if there are any NAs in a data frame.
 }

@@ -11,9 +11,16 @@ AllIntegers <- function(x)
 #' \code{AllVariablesNames}
 #' @description Find the names of the variables (including those in dataframes) in a formula.
 #' @param formula A \code{\link{formula}}.
+#' @param data A \code{\link{data.frame}}.
 #' @export
-AllVariablesNames <- function(formula)
+AllVariablesNames <- function(formula, data = NULL)
 {
+    if (length(formula) == 3 && formula[3] == ".()") {
+        if (is.null(data))
+            stop("If predictor variables are specified by '.' then data must be given to extract names.")
+        return(colnames(data))
+    }
+
     .randomStr <- function(n.characters = 16)
     {
         paste0(sample(c(letters, LETTERS), n.characters, replace = TRUE), collapse = "")
@@ -96,13 +103,14 @@ OutcomeName <- function(formula)
 
 
 #' \code{HasOutcome}
-#' @description Checking if the formula contains an outcome (varib)i.e., dependent variable).
+#' @description Checking if the formula contains an outcome i.e., dependent variable).
 #' @param formula A \code{\link{formula}}.
 #' @return logical
 #' @export
 HasOutcome <- function(formula)
 {
-    attr(stats::terms(formula), "response") != 0
+    length(formula) == 3
+    #attr(stats::terms(formula), "response") != 0 cannot be used without data if formula contains "."
 }
 
 #' \code{PrintDetails}
@@ -186,7 +194,7 @@ HasSubset <- function(subset)
 
 
 #' \code{AnyNA}
-#' @description Checks to see if there are any NAs in a data frame.0.
+#' @description Checks to see if there are any NAs in a data frame.
 #' @param data A \code{\link{data.frame}}.
 #' @param formula A \code{\link{formula}}. Where supplied, only variables in the formula are checked.
 #' @return logical.

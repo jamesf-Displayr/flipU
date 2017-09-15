@@ -4,10 +4,12 @@
 \alias{AllVariablesNames}
 \title{\code{AllVariablesNames}}
 \usage{
-AllVariablesNames(formula)
+AllVariablesNames(formula, data = NULL)
 }
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
+
+\item{data}{A \code{\link{data.frame}}.}
 }
 \description{
 Find the names of the variables (including those in dataframes) in a formula.
