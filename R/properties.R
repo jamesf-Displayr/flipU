@@ -15,10 +15,15 @@ AllIntegers <- function(x)
 #' @export
 AllVariablesNames <- function(formula, data = NULL)
 {
-    if (length(formula) == 3 && formula[3] == ".()") {
-        if (is.null(data))
-            stop("If predictor variables are specified by '.' then data must be given to extract names.")
-        return(colnames(data))
+    if (length(formula) == 3) {
+        if (formula[3] == ".()") {
+            if (is.null(data))
+                stop("If predictor variables are specified by '.' then data must be given to extract names.")
+            dep <- all.vars(formula)[1]
+            indep <- colnames(data)
+            indep <- indep[indep != dep]
+            return(c(dep, indep))
+        }
     }
 
     .randomStr <- function(n.characters = 16)
@@ -92,12 +97,13 @@ CopyAttributes <- function(data.without.attributes, data.with.attributes)
 #' \code{OutcomeName}
 #' @description Find the name of the outcome variable.
 #' @param formula A \code{\link{formula}}.
+#' @param data A \code{\link{data.frame}}.
 #' @return character.
 #' @export
-OutcomeName <- function(formula)
+OutcomeName <- function(formula, data = NULL)
 {
     if (HasOutcome(formula))
-        return(AllVariablesNames(formula)[1])
+        return(AllVariablesNames(formula, data = data)[1])
     return(NULL)
 }
 
@@ -110,7 +116,6 @@ OutcomeName <- function(formula)
 HasOutcome <- function(formula)
 {
     length(formula) == 3
-    #attr(stats::terms(formula), "response") != 0 cannot be used without data if formula contains "."
 }
 
 #' \code{PrintDetails}

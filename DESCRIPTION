@@ -7,7 +7,8 @@ Maintainer: Displayr <opensource@displayr.com>
 Description: Utility functions used across multiple flip packages.
 License: GPL-3
 LazyData: TRUE
-Imports: testthat
+Imports:
+    testthat
 Suggests:
     flipRegression
 RoxygenNote: 6.0.1

@@ -4,10 +4,12 @@
 \alias{OutcomeName}
 \title{\code{OutcomeName}}
 \usage{
-OutcomeName(formula)
+OutcomeName(formula, data = NULL)
 }
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
+
+\item{data}{A \code{\link{data.frame}}.}
 }
 \value{
 character.
