@@ -184,7 +184,7 @@ IsCount <- function(x) {
 #' @export
 OutcomeVariable <- function(formula, data)
 {
-    data[[OutcomeName(formula)]]
+    data[[OutcomeName(formula, data)]]
 }
 
 #' \code{HasSubset}
