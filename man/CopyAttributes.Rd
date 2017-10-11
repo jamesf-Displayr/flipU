@@ -2,19 +2,35 @@
 % Please edit documentation in R/properties.R
 \name{CopyAttributes}
 \alias{CopyAttributes}
-\title{\code{CopyAttributes}}
+\title{Copy attributes from one object to}
 \usage{
-CopyAttributes(data.without.attributes, data.with.attributes)
+CopyAttributes(data.without.attributes, data.with.attributes,
+  attr.to.not.copy = c("dimnames", "names", "row.names", "dim", "class",
+  "levels"))
 }
 \arguments{
-\item{data.without.attributes}{A \code{\link{data.frame}}.}
+\item{data.without.attributes}{an object to receive attributes from, such as
+a data.frame, list, or matrix}
 
-\item{data.with.attributes}{A \code{\link{data.frame}}.}
+\item{data.with.attributes}{an object to copy attributes from}
+
+\item{attr.to.not.copy}{character vector of attribute names appearing in
+\code{data.with.attributes} that should not be copied}
 }
 \value{
-A \code{\link{data.frame}}.
+A copy of \code{data.without.attributes} with all the attributes
+of \code{data.with.attributes}.
 }
 \description{
 Copies the "label", "name", "question" and "questiontype" attributes
 for each for variable in a \code{\link{data.frame}}.
+}
+\details{
+In the case when both arguments are \code{data.frame}s, any attributes
+in the columns of \code{data.with.attributes} will also be copied to
+\code{data.without.attributes} excluding \code{class} and \code{levels}
+
+In the case when the inputs are data.frames (lists), names are used when
+copying attributes in each component.  Nothing will be copied for the case
+of lists with \code{NULL} names attribute
 }

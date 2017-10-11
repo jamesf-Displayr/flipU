@@ -71,14 +71,53 @@ AllVariablesNames <- function(formula, data = NULL)
     }, USE.NAMES = FALSE)
 }
 
+#' Copy attributes from one object to
+#'
+#' Copies the "label", "name", "question" and "questiontype" attributes
+#' for each for variable in a \code{\link{data.frame}}.
+#' @param data.without.attributes an object to receive attributes from, such as
+#' a data.frame, list, or matrix
+#' @param data.with.attributes an object to copy attributes from
+#' @param attr.to.not.copy character vector of attribute names appearing in
+#' \code{data.with.attributes} that should not be copied
+#' @return A copy of \code{data.without.attributes} with all the attributes
+#' of \code{data.with.attributes}.
+#' @details In the case when both arguments are \code{data.frame}s, any attributes
+#' in the columns of \code{data.with.attributes} will also be copied to
+#' \code{data.without.attributes} excluding \code{class} and \code{levels}
+#'
+#' In the case when the inputs are data.frames (lists), names are used when
+#' copying attributes in each component.  Nothing will be copied for the case
+#' of lists with \code{NULL} names attribute
+#' @export
+CopyAttributes <- function(data.without.attributes, data.with.attributes,
+                           attr.to.not.copy = c("dimnames", "names", "row.names",
+                                                "dim", "class", "levels"))
+{
+    ## for data.frame recursion when arg1 has columns arg2 does not,
+    ## atts.to.copy will be NULL and data.without.attributes is returned
+    atts.to.copy <- names(attributes(data.with.attributes))
+    atts.to.copy <- atts.to.copy[!atts.to.copy %in% attr.to.not.copy]
+    for (a in atts.to.copy)
+        attr(data.without.attributes, a) <- attr(data.with.attributes, a)
+
+    if (is.list(data.without.attributes))
+        for (n in names(data.without.attributes))
+            data.without.attributes[[n]] <- CopyAttributes(data.without.attributes[[n]],
+                                                           data.with.attributes[[n]])
+
+    data.without.attributes
+}
+
+
 #' \code{CopyAttributes}
 #' @description Copies the "label", "name", "question" and "questiontype" attributes
 #' for each for variable in a \code{\link{data.frame}}.
 #' @param data.without.attributes A \code{\link{data.frame}}.
 #' @param data.with.attributes A \code{\link{data.frame}}.
 #' @return A \code{\link{data.frame}}.
-#' @export
-CopyAttributes <- function(data.without.attributes, data.with.attributes)
+#' @noRd
+copyAttributesOld <- function(data.without.attributes, data.with.attributes)
 {
     if (is.list(data.without.attributes))
     {
@@ -92,7 +131,6 @@ CopyAttributes <- function(data.without.attributes, data.with.attributes)
         attr(data.without.attributes, a) <- attr(data.with.attributes, a)
     data.without.attributes
 }
-
 
 #' \code{OutcomeName}
 #' @description Find the name of the outcome variable.
