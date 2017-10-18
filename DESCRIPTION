@@ -9,6 +9,4 @@ License: GPL-3
 LazyData: TRUE
 Imports:
     testthat
-Suggests:
-    flipRegression
 RoxygenNote: 6.0.1
