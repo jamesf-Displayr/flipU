@@ -1,5 +1,5 @@
-#' \code{AllIntegers}
-#' @description  that all items in a variable are integers.
+#' Test if all items in a variable are integers
+#'
 #' @param x A vector.
 #' @return logical.
 #' @export
@@ -8,24 +8,16 @@ AllIntegers <- function(x)
     all(x %% 1 == 0)
 }
 
-#' \code{AllVariablesNames}
-#' @description Find the names of the variables (including those in dataframes) in a formula.
+#' Find the names of the variables in a formula
+#'
+#' Handles \code{.} on right hand side of formula and \code{$} within backticks in
+#' variable names.
 #' @param formula A \code{\link{formula}}.
-#' @param data A \code{\link{data.frame}}.
+#' @param data A \code{\link{data.frame}} from which to extract variable names if \code{.}
+#' is used in the formula.
 #' @export
 AllVariablesNames <- function(formula, data = NULL)
 {
-    if (length(formula) == 3) {
-        if (formula[3] == ".()") {
-            if (is.null(data))
-                stop("If predictor variables are specified by '.' then data must be given to extract names.")
-            dep <- all.vars(formula)[1]
-            indep <- colnames(data)
-            indep <- indep[indep != dep]
-            return(c(dep, indep))
-        }
-    }
-
     .randomStr <- function(n.characters = 16)
     {
         paste0(sample(c(letters, LETTERS), n.characters, replace = TRUE), collapse = "")
@@ -64,14 +56,26 @@ AllVariablesNames <- function(formula, data = NULL)
     var.names <- all.vars(formula(new.str))
 
     # Replace the placeholders in the variable names
-    sapply(var.names, function(x) {
+    formula.vars <- sapply(var.names, function(x) {
         for (nm in names(replaced.text))
             x <- gsub(nm, replaced.text[[nm]], x, fixed = TRUE)
         x
     }, USE.NAMES = FALSE)
+
+    if (length(formula) == 3 && formula[3] == ".()")   # dot on RHS
+    {
+        if (is.null(data))
+            stop("If predictor variables are specified by '.' then data must be given to extract names.")
+        dep <- formula.vars[1]
+        indep <- colnames(data)
+        indep <- indep[indep != dep]
+        formula.vars <- c(dep, indep)
+    }
+
+    return(formula.vars)
 }
 
-#' Copy attributes from one object to
+#' Copy attributes from one object to another
 #'
 #' Copies the "label", "name", "question" and "questiontype" attributes
 #' for each for variable in a \code{\link{data.frame}}.
@@ -132,10 +136,11 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
     data.without.attributes
 }
 
-#' \code{OutcomeName}
-#' @description Find the name of the outcome variable.
+#' Find the name of the outcome variable from a formula
+#'
 #' @param formula A \code{\link{formula}}.
-#' @param data A \code{\link{data.frame}}.
+#' @param data A \code{\link{data.frame}} containing the variables in the formula. This is required
+#' if the formula contains \code{.}.
 #' @return character.
 #' @export
 OutcomeName <- function(formula, data = NULL)
@@ -146,8 +151,8 @@ OutcomeName <- function(formula, data = NULL)
 }
 
 
-#' \code{HasOutcome}
-#' @description Checking if the formula contains an outcome i.e., dependent variable).
+#' Check if a formula contains an outcome variable
+#'
 #' @param formula A \code{\link{formula}}.
 #' @return logical
 #' @export
@@ -156,8 +161,8 @@ HasOutcome <- function(formula)
     length(formula) == 3
 }
 
-#' \code{PrintDetails}
-#' @description A print function for error checking.
+#' A print function for error checking
+#'
 #' Prints its name and a \code{\link{summary}}.
 #' @param x Something to be printed.
 #' @export
@@ -168,20 +173,9 @@ PrintDetails <- function(x)
     cat("\n")
 }
 
-#' #' \code{UnclassIfNecessary}
-#' #' @description Unclasses a variable if it is a factor. Otherwise, returns x.
-#' #' @param x A vector.
-#' #' @return A vector
-#' #' @export
-#' UnclassIfNecessary <- function(x)
-#' {
-#'     if(is.factor(x))
-#'         return(unclass(x));
-#'     return(x);
-#' }
 
-#' \code{AnyNegative}
-#' @description The values contain a negative value.
+#' Test whether a vector contains any negative values
+#'
 #' @param x A vector.
 #' @return logical.
 #' @export
@@ -190,8 +184,8 @@ AnyNegative <- function(x)
     min(c(x, NA), na.rm = TRUE) < 0
 }
 
-#' \code{IsCount}
-#' @description Checks of data, or, a model description, counts or represents counts.
+#' Check if data, or, a model description, counts or represents counts
+#'
 #' @param x A variable or text string describing a family (e.g., "Poisson").
 #' @return logical.
 #' @export
@@ -214,10 +208,10 @@ IsCount <- function(x) {
     sum(as.integer(u) != u, na.rm = TRUE) == 0}
 
 
-#' \code{OutcomeVariable}
-#' @description Returns the outcome variable from a model.
+#' Return the outcome variable from a model
+#'
 #' @param formula A \code{\link{formula}}.
-#' @param data A \code{\link{data.frame}}.
+#' @param data A \code{\link{data.frame}} from which to extract the variable.
 #' @return A vector of data.
 #' @export
 OutcomeVariable <- function(formula, data)
@@ -225,8 +219,8 @@ OutcomeVariable <- function(formula, data)
     data[[OutcomeName(formula, data)]]
 }
 
-#' \code{HasSubset}
-#' @description Checks that the subset contains data.
+#' Check that a subset contains data
+#'
 #' @param subset The filter used to filter data in a model.
 #' @return true if the subset contains information
 #' @export
@@ -236,8 +230,8 @@ HasSubset <- function(subset)
 }
 
 
-#' \code{AnyNA}
-#' @description Checks to see if there are any NAs in a data frame.
+#' Check if there are any NAs in a data frame
+#'
 #' @param data A \code{\link{data.frame}}.
 #' @param formula A \code{\link{formula}}. Where supplied, only variables in the formula are checked.
 #' @return logical.
@@ -250,5 +244,3 @@ AnyNA <- function(data, formula = NULL)
     }
     any(is.na(data))
 }
-
-

@@ -2,7 +2,7 @@
 % Please edit documentation in R/properties.R
 \name{AllIntegers}
 \alias{AllIntegers}
-\title{\code{AllIntegers}}
+\title{Test if all items in a variable are integers}
 \usage{
 AllIntegers(x)
 }
@@ -13,5 +13,5 @@ AllIntegers(x)
 logical.
 }
 \description{
-that all items in a variable are integers.
+Test if all items in a variable are integers
 }

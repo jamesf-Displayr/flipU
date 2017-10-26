@@ -2,18 +2,18 @@
 % Please edit documentation in R/properties.R
 \name{OutcomeVariable}
 \alias{OutcomeVariable}
-\title{\code{OutcomeVariable}}
+\title{Return the outcome variable from a model}
 \usage{
 OutcomeVariable(formula, data)
 }
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
 
-\item{data}{A \code{\link{data.frame}}.}
+\item{data}{A \code{\link{data.frame}} from which to extract the variable.}
 }
 \value{
 A vector of data.
 }
 \description{
-Returns the outcome variable from a model.
+Return the outcome variable from a model
 }

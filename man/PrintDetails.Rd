@@ -2,7 +2,7 @@
 % Please edit documentation in R/properties.R
 \name{PrintDetails}
 \alias{PrintDetails}
-\title{\code{PrintDetails}}
+\title{A print function for error checking}
 \usage{
 PrintDetails(x)
 }
@@ -10,6 +10,5 @@ PrintDetails(x)
 \item{x}{Something to be printed.}
 }
 \description{
-A print function for error checking.
 Prints its name and a \code{\link{summary}}.
 }

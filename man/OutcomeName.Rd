@@ -2,18 +2,19 @@
 % Please edit documentation in R/properties.R
 \name{OutcomeName}
 \alias{OutcomeName}
-\title{\code{OutcomeName}}
+\title{Find the name of the outcome variable from a formula}
 \usage{
 OutcomeName(formula, data = NULL)
 }
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
 
-\item{data}{A \code{\link{data.frame}}.}
+\item{data}{A \code{\link{data.frame}} containing the variables in the formula. This is required
+if the formula contains \code{.}.}
 }
 \value{
 character.
 }
 \description{
-Find the name of the outcome variable.
+Find the name of the outcome variable from a formula
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/properties.R
 \name{AnyNA}
 \alias{AnyNA}
-\title{\code{AnyNA}}
+\title{Check if there are any NAs in a data frame}
 \usage{
 AnyNA(data, formula = NULL)
 }
@@ -15,5 +15,5 @@ AnyNA(data, formula = NULL)
 logical.
 }
 \description{
-Checks to see if there are any NAs in a data frame.
+Check if there are any NAs in a data frame
 }

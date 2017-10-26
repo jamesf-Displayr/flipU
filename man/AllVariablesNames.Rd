@@ -2,15 +2,17 @@
 % Please edit documentation in R/properties.R
 \name{AllVariablesNames}
 \alias{AllVariablesNames}
-\title{\code{AllVariablesNames}}
+\title{Find the names of the variables in a formula}
 \usage{
 AllVariablesNames(formula, data = NULL)
 }
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
 
-\item{data}{A \code{\link{data.frame}}.}
+\item{data}{A \code{\link{data.frame}} from which to extract variable names if \code{.}
+is used in the formula.}
 }
 \description{
-Find the names of the variables (including those in dataframes) in a formula.
+Handles \code{.} on right hand side of formula and \code{$} within backticks in
+variable names.
 }

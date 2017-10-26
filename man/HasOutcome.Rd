@@ -2,7 +2,7 @@
 % Please edit documentation in R/properties.R
 \name{HasOutcome}
 \alias{HasOutcome}
-\title{\code{HasOutcome}}
+\title{Check if a formula contains an outcome variable}
 \usage{
 HasOutcome(formula)
 }
@@ -13,5 +13,5 @@ HasOutcome(formula)
 logical
 }
 \description{
-Checking if the formula contains an outcome i.e., dependent variable).
+Check if a formula contains an outcome variable
 }

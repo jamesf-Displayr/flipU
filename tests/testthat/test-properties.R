@@ -242,4 +242,8 @@ test_that("CopyAttributes with data.frames with different columns",
 
 test_that("AllVariablesNames", {
     expect_equal(AllVariablesNames(`Cola.sav$Variables$Q2` ~ Q3), c("`Cola.sav$Variables$Q2`", "Q3"))
+    df1 <- data.frame(x = 1, y = 2, z = 3)
+    colnames(df1)[1] <- "`Cola.sav$Variables$Q2`"
+    colnames(df1)[2] <- "`Cola.sav$Variables$Q99`"
+    expect_equal(AllVariablesNames(`Cola.sav$Variables$Q2` ~ ., data = df1), c("`Cola.sav$Variables$Q2`", "`Cola.sav$Variables$Q99`", "z"))
 })

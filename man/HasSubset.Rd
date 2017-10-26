@@ -2,7 +2,7 @@
 % Please edit documentation in R/properties.R
 \name{HasSubset}
 \alias{HasSubset}
-\title{\code{HasSubset}}
+\title{Check that a subset contains data}
 \usage{
 HasSubset(subset)
 }
@@ -13,5 +13,5 @@ HasSubset(subset)
 true if the subset contains information
 }
 \description{
-Checks that the subset contains data.
+Check that a subset contains data
 }

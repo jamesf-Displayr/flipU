@@ -2,7 +2,7 @@
 % Please edit documentation in R/properties.R
 \name{CopyAttributes}
 \alias{CopyAttributes}
-\title{Copy attributes from one object to}
+\title{Copy attributes from one object to another}
 \usage{
 CopyAttributes(data.without.attributes, data.with.attributes,
   attr.to.not.copy = c("dimnames", "names", "row.names", "dim", "class",

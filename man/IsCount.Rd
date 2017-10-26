@@ -2,7 +2,7 @@
 % Please edit documentation in R/properties.R
 \name{IsCount}
 \alias{IsCount}
-\title{\code{IsCount}}
+\title{Check if data, or, a model description, counts or represents counts}
 \usage{
 IsCount(x)
 }
@@ -13,5 +13,5 @@ IsCount(x)
 logical.
 }
 \description{
-Checks of data, or, a model description, counts or represents counts.
+Check if data, or, a model description, counts or represents counts
 }
