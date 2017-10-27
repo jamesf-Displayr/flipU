@@ -8,6 +8,22 @@ AllIntegers <- function(x)
     all(x %% 1 == 0)
 }
 
+AVN <- function(formula, data = NULL)
+{
+    terms <- stats::terms(formula, data = data, keep.order = TRUE)
+    call <- attr(terms, "variables")
+    all.vars(call)
+}
+
+AVN2 <- function(formula, data = NULL)
+{
+    terms <- stats::terms(formula, data = data)
+    tl <- attr(terms, "term.labels")
+    ## funky case
+    gsub("\\\\''", "", tl)
+}
+
+
 #' Find the names of the variables in a formula
 #'
 #' Handles \code{.} on right hand side of formula and \code{$} within backticks in
