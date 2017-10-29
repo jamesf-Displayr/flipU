@@ -14,3 +14,10 @@ test_that("LookupName",{
     expect_equal(LookupName(3, d1), NULL)
 
 })
+
+
+test_that("RemoveCharacterElements", # This is more extensively tested in flipTables via the functions for removing rows and columns
+          {
+              expect_equal(RemoveCharacterElements(LETTERS[1:5]), LETTERS[1:5])
+              expect_equal(RemoveCharacterElements(LETTERS[1:5], names.to.remove = "C"), LETTERS[1:5][-3])
+          })
