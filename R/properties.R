@@ -5,7 +5,7 @@
 #' @export
 AllIntegers <- function(x)
 {
-    all(x %% 1 == 0)
+    all(x == floor(x))
 }
 
 #' Find the names of the variables in a formula

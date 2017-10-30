@@ -66,27 +66,3 @@ TrimWhitespace <- function (x){
 
 
 
-
-
-#' RemoveCharacterElements
-#'
-#' Removes elements from a \code{\link{character}} vector, ignoring case.
-#' @param names The \code{\link{vector}} of \code{\link{character}}..
-#' @param names.to.remove A character vector or delimited string containing the
-#' row labels to remove.
-#' @param split Character delimiter to split \code{row.names.to.remove}
-#' and \code{col.names.to.remove} on. Default is to split on either of
-#' \code{","} or \code{";"}. Assumed to be a regular expression; see
-#' \code{\link{strsplit}}.
-#' @details Trailing spaces are removed and lower/upper case is ignored.
-#' @return A vector containing the names that have not been removed.
-#' @export
-RemoveCharacterElements <- function(names, names.to.remove = c("NET", "Total", "SUM"), split = "[;,]")
-{
-    if (is.null(names) || is.null(names.to.remove) || split == "")
-        return(names)
-    tmpname <- tolower(trimws(names))
-    tmpstring <- ConvertCommaSeparatedStringToVector(names.to.remove, split)
-    tmpstring <- tolower(tmpstring)
-    names[!tmpname %in% tmpstring]
-}
