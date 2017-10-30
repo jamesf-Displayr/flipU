@@ -8,42 +8,6 @@ AllIntegers <- function(x)
     all(x %% 1 == 0)
 }
 
-AVN <- function(formula, data = NULL)
-{
-    terms <- stats::terms(formula, data = data, keep.order = TRUE)
-    call <- attr(terms, "variables")
-    all.vars(call)
-}
-
-AVN4 <- function(formula, data = NULL)
-{   ## response sometimes appears twice in output (once with
-    ## backticks, once without) when dot on RHS
-    ## backticks are sometimes lost ex. `a$b` ~ c returns c("a$b", "c")
-    all.vars(terms(formula, data = data, keep.order = TRUE))
-}
-
-compFun <- function(formula, data = NULL)
-    identical(AVN(formula, data), AVN4(formula, data))
-
-AVN3 <- function(formula, data = NULL)
-{
-    terms <- stats::terms(formula, data = data, keep.order = TRUE)
-    call <- attr(terms, "variables")
-    out <- all.vars(call)
-
-    ## add backticks for any var with non-syntactic names
-    ## that doesn't already have backticks
-    nonsyn.idx <- (make.names(out, unique = FALSE) != out
-                               & !grepl("^`.*`$", out))
-    if (any(nonsyn.idx))
-        out[nonsyn.idx] <- paste0("`", out[nonsyn.idx], "`")
-
-    ## need unique() below because of strange behaviour where
-    ## response sometimes appears twice in output (once with
-    ## backticks, once without) when dot on RHS
-    unique(out)
-}
-
 #' Find the names of the variables in a formula
 #'
 #' Handles \code{.} on right hand side of formula and \code{$} within backticks in
@@ -75,83 +39,6 @@ AllVariablesNames <- function(formula, data = NULL)
     ## response sometimes appears twice in output (once with
     ## backticks, once without) when dot on RHS
     unique(out)
-}
-
-
-AVN2 <- function(formula, data = NULL)
-{
-    terms <- stats::terms(formula, data = data)
-    tl <- attr(terms, "term.labels")
-    ## funky case
-    gsub("\\\\`", "", tl)
-}
-
-
-#' Find the names of the variables in a formula
-#'
-#' Handles \code{.} on right hand side of formula and \code{$} within backticks in
-#' variable names.
-#' @param formula A \code{\link{formula}}.
-#' @param data A \code{\link{data.frame}} from which to extract variable names if \code{.}
-#' is used in the formula.
-#' @noRd
-allVariablesNames <- function(formula, data = NULL)
-{
-    .randomStr <- function(n.characters = 16)
-    {
-        paste0(sample(c(letters, LETTERS), n.characters, replace = TRUE), collapse = "")
-    }
-
-    dollar.placeholder <- .randomStr()
-    replaced.text <- list()
-    replaced.text[[dollar.placeholder]] <- "$"
-
-    formula.str <- paste0(deparse(formula), collapse = "")
-    new.str <- ""
-    inside.backticks <- FALSE
-    backtick.start <- NA
-    # We need to replace parts of the formula with placeholders in order to use all.vars()
-    for (i in 1:nchar(formula.str))
-    {
-        ch <- substr(formula.str, i, i)
-        if (ch == "$" && !inside.backticks)
-            new.str <- paste0(new.str, dollar.placeholder)
-        else if (ch == "`")
-        {
-            if (inside.backticks)
-            {
-                placeholder <- .randomStr()
-                replaced.text[[placeholder]] <- substr(formula.str, backtick.start, i)
-                new.str <- paste0(new.str, placeholder)
-            }
-            else
-                backtick.start <- i
-            inside.backticks <- !inside.backticks
-        }
-        else if (!inside.backticks)
-            new.str <- paste0(new.str, ch)
-    }
-
-    var.names <- all.vars(formula(new.str))
-
-    # Replace the placeholders in the variable names
-    formula.vars <- sapply(var.names, function(x) {
-        for (nm in names(replaced.text))
-            x <- gsub(nm, replaced.text[[nm]], x, fixed = TRUE)
-        x
-    }, USE.NAMES = FALSE)
-
-    if (length(formula) == 3 && formula[3] == ".()")   # dot on RHS
-    {
-        if (is.null(data))
-            stop("If predictor variables are specified by '.' then data must be given to extract names.")
-        dep <- formula.vars[1]
-        indep <- colnames(data)
-        indep <- indep[indep != dep]
-        formula.vars <- c(dep, indep)
-    }
-
-    return(formula.vars)
 }
 
 #' Copy attributes from one object to another
