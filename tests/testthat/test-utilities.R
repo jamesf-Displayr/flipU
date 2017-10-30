@@ -1,7 +1,4 @@
 
-
-
-
 test_that("ConvertCommaSeparatedStringToVector",
           {
               expect_equal(ConvertCommaSeparatedStringToVector("a, a "), c("a","a"))

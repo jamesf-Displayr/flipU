@@ -8,5 +8,6 @@ Description: Utility functions used across multiple flip packages.
 License: GPL-3
 LazyData: TRUE
 Imports:
-    testthat
+    testthat,
+    utils
 RoxygenNote: 6.0.1
