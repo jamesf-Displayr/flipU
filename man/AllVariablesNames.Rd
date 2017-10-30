@@ -9,10 +9,20 @@ AllVariablesNames(formula, data = NULL)
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
 
-\item{data}{A \code{\link{data.frame}} from which to extract variable names if \code{.}
-is used in the formula.}
+\item{data}{A \code{\link{data.frame}} from which to extract variable
+names if \code{.} is used in the formula.}
+}
+\value{
+A character vector of variable names appearing in \code{formula}.
 }
 \description{
 Handles \code{.} on right hand side of formula and \code{$} within backticks in
 variable names.
+}
+\examples{
+dat <- data.frame("dat$Var$y" = 1, x = 2, "`dat$Var$z`" = 3,
+                               check.names = FALSE)
+AllVariablesNames(`dat$Var$y` ~ ., data = dat)
+AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`, data = dat)
+AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`*x)
 }
