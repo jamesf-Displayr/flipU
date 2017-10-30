@@ -46,16 +46,6 @@ RemoveAt.data.frame <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE,
     RemoveAt.array(x, at, MARGIN, ignore.case, split)
 }
 
-
-
-#' @inherit RemoveAt
-#' @export
-RemoveAt.matrix <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
-{
-    RemoveAt.array(x, at, MARGIN, ignore.case, split)
-}
-
-
 #' @inherit RemoveAt
 #' @export
 RemoveAt.array <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
@@ -71,6 +61,13 @@ RemoveAt.array <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, spli
         out <- removeFromDimension(out, a, MARGIN[m], ignore.case, split)
     }
     CopyAttributes(out, x)
+}
+
+#' @inherit RemoveAt
+#' @export
+RemoveAt.matrix <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
+{
+    RemoveAt.array(x, at, MARGIN, ignore.case, split)
 }
 
 removeArrayInputsBad <- function(x, at, MARGIN)
