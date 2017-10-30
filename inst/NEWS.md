@@ -1,8 +1,10 @@
-Changes in Version 1.0.1 (2017-10-18)
+Changes in Version 1.0.2 (2017-10-30)
 --------------------------------------------------------
 
 BUG FIXES
 
+* Improved support for `.` on right hand side of formulae
+in `AllVariablesNames` (DS-1527)
 * Removed `flipRegression` from Suggests
 
 Changes in Version 1.0.0 (2017-10-11)

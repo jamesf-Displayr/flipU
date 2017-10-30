@@ -15,12 +15,75 @@ AVN <- function(formula, data = NULL)
     all.vars(call)
 }
 
+AVN4 <- function(formula, data = NULL)
+{   ## response sometimes appears twice in output (once with
+    ## backticks, once without) when dot on RHS
+    ## backticks are sometimes lost ex. `a$b` ~ c returns c("a$b", "c")
+    all.vars(terms(formula, data = data, keep.order = TRUE))
+}
+
+compFun <- function(formula, data = NULL)
+    identical(AVN(formula, data), AVN4(formula, data))
+
+AVN3 <- function(formula, data = NULL)
+{
+    terms <- stats::terms(formula, data = data, keep.order = TRUE)
+    call <- attr(terms, "variables")
+    out <- all.vars(call)
+
+    ## add backticks for any var with non-syntactic names
+    ## that doesn't already have backticks
+    nonsyn.idx <- (make.names(out, unique = FALSE) != out
+                               & !grepl("^`.*`$", out))
+    if (any(nonsyn.idx))
+        out[nonsyn.idx] <- paste0("`", out[nonsyn.idx], "`")
+
+    ## need unique() below because of strange behaviour where
+    ## response sometimes appears twice in output (once with
+    ## backticks, once without) when dot on RHS
+    unique(out)
+}
+
+#' Find the names of the variables in a formula
+#'
+#' Handles \code{.} on right hand side of formula and \code{$} within backticks in
+#' variable names.
+#' @param formula A \code{\link{formula}}.
+#' @param data A \code{\link{data.frame}} from which to extract variable
+#' names if \code{.} is used in the formula.
+#' @return A character vector of variable names appearing in \code{formula}.
+#' @export
+#' @importFrom stats terms
+#' @examples
+#' dat <- data.frame("dat$Var$y" = 1, x = 2, "`dat$Var$z`" = 3,
+#'                                check.names = FALSE)
+#' AllVariablesNames(`dat$Var$y` ~ ., data = dat)
+#' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`, data = dat)
+#' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`*x)
+AllVariablesNames <- function(formula, data = NULL)
+{
+    out <- all.vars(terms(formula, data = data, keep.order = TRUE))
+
+    ## add backticks for any var with non-syntactic names
+    ## that doesn't already have backticks
+    nonsyn.idx <- (make.names(out, unique = FALSE) != out
+                               & !grepl("^`.*`$", out))
+    if (any(nonsyn.idx))
+        out[nonsyn.idx] <- paste0("`", out[nonsyn.idx], "`")
+
+    ## need unique() below because of strange behaviour where
+    ## response sometimes appears twice in output (once with
+    ## backticks, once without) when dot on RHS
+    unique(out)
+}
+
+
 AVN2 <- function(formula, data = NULL)
 {
     terms <- stats::terms(formula, data = data)
     tl <- attr(terms, "term.labels")
     ## funky case
-    gsub("\\\\''", "", tl)
+    gsub("\\\\`", "", tl)
 }
 
 
@@ -31,8 +94,8 @@ AVN2 <- function(formula, data = NULL)
 #' @param formula A \code{\link{formula}}.
 #' @param data A \code{\link{data.frame}} from which to extract variable names if \code{.}
 #' is used in the formula.
-#' @export
-AllVariablesNames <- function(formula, data = NULL)
+#' @noRd
+allVariablesNames <- function(formula, data = NULL)
 {
     .randomStr <- function(n.characters = 16)
     {
