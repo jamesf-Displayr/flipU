@@ -9,11 +9,12 @@ OutcomeName(formula, data = NULL)
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
 
-\item{data}{A \code{\link{data.frame}} containing the variables in the formula. This is required
-if the formula contains \code{.}.}
+\item{data}{A \code{\link{data.frame}} containing the variables in the formula.
+Currently, ignored.}
 }
 \value{
-character.
+Character string giving the response variable name, or \code{NULL} if
+no response is present in \code{formula}.
 }
 \description{
 Find the name of the outcome variable from a formula

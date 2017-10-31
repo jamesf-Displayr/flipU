@@ -1,3 +1,12 @@
+Changes in Version 1.0.3 (2017-10-31)
+--------------------------------------------------------
+
+BUG FIXES
+
+* Fix for `AllVariablesNames` in case where `$` is being used in a
+ formula without backticks (DS-1527)
+
+
 Changes in Version 1.0.2 (2017-10-30)
 --------------------------------------------------------
 

@@ -255,7 +255,7 @@ test_that("AllVariablesNames  non-syntactic response,  dot on RHS", {
 
 test_that("AllVariablesNames backticks are added to any non-syntactic variable",
 {
-    dat <- data.frame(`a$b$c` = 1, "a\b" = 3, `d$e$f` = 2,
+    dat <- data.frame(`a$b$c` = 1, "a?b" = 3, `d$e$f` = 2,
                       check.names = FALSE)
     out <- AllVariablesNames(`a$b$c` ~ ., data = dat)
     expect_equal(out, paste0("`", names(dat), "`"))
@@ -298,4 +298,11 @@ test_that("AllVariablesNames interaction in formula", {
     ## backticks are added to any non-syntactic variable
     expect_equal(out[1], paste0("`", names(dat)[1], "`"))
     expect_equal(out[2:3], names(dat)[2:3])
+})
+
+test_that("AllVariablesNames $ + no backticks in formula, data NULL", {
+    dat <- data.frame(y = 1, x = 2)
+    out <- AllVariablesNames(dat$y ~ dat$x, data = NULL)
+    ## backticks are added to any non-syntactic variable
+    expect_equal(out, paste0("dat$", names(dat)))
 })

@@ -26,19 +26,18 @@ AllIntegers <- function(x)
 #' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`*x)
 AllVariablesNames <- function(formula, data = NULL)
 {
-    out <- all.vars(terms(formula, data = data, keep.order = TRUE))
+    ## 1) backticks in col. names get backslash escapes
+    ## 2) response needs to be obtained separately
+    terms <- stats::terms(formula, data = data)
+    tl <- attr(terms, "term.labels")
 
-    ## add backticks for any var with non-syntactic names
-    ## that doesn't already have backticks
-    nonsyn.idx <- (make.names(out, unique = FALSE) != out
-                               & !grepl("^`.*`$", out))
-    if (any(nonsyn.idx))
-        out[nonsyn.idx] <- paste0("`", out[nonsyn.idx], "`")
+    ## Literal backticks present in data names
+    ## are escaped with '\\' in tl, so need to substitute them out.
+    out <- gsub("\\\\`", "", tl)
 
-    ## need unique() below because of strange behaviour where
-    ## response sometimes appears twice in output (once with
-    ## backticks, once without) when dot on RHS
-    unique(out)
+    ## Need unique() below because of strange behaviour where
+    ## backtick'd response sometimes appears in tl when dot on RHS
+    unique(c(OutcomeName(formula), out))
 }
 
 #' Copy attributes from one object to another
@@ -105,14 +104,15 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
 #' Find the name of the outcome variable from a formula
 #'
 #' @param formula A \code{\link{formula}}.
-#' @param data A \code{\link{data.frame}} containing the variables in the formula. This is required
-#' if the formula contains \code{.}.
-#' @return character.
+#' @param data A \code{\link{data.frame}} containing the variables in the formula.
+#' Currently, ignored.
+#' @return Character string giving the response variable name, or \code{NULL} if
+#' no response is present in \code{formula}.
 #' @export
 OutcomeName <- function(formula, data = NULL)
 {
     if (HasOutcome(formula))
-        return(AllVariablesNames(formula, data = data)[1])
+        return(as.character(formula)[2])
     return(NULL)
 }
 
