@@ -180,7 +180,7 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
 OutcomeName <- function(formula, data = NULL)
 {
     if (HasOutcome(formula))
-        return(as.character(formula)[2])
+        return(parseVar(formula[2]))
     return(NULL)
 }
 
