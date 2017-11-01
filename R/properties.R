@@ -24,27 +24,88 @@ AllIntegers <- function(x)
 #' AllVariablesNames(`dat$Var$y` ~ ., data = dat)
 #' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`, data = dat)
 #' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`*x)
+#' AllVariablesNames(log(y)~I(x^2))
 AllVariablesNames <- function(formula, data = NULL)
 {
-    ## 1) backticks in col. names get backslash escapes
-    ## 2) response needs to be obtained separately
-    terms <- stats::terms(formula, data = data)
-    tl <- attr(terms, "term.labels")
+    terms <- stats::terms(formula, data = data, keep.order = TRUE)
+    vars <- attr(terms, "variables")
 
-    ## Literal backticks present in data names
-    ## are escaped with '\\' in tl, so need to substitute them out.
-    out <- gsub("\\\\`", "", tl)
+    out <- parseVars(vars)
 
-    ## tl contains interactions, need to split them into
-    ## main effects/variables and keep unique ones.
-    ## Complex regex is so we don't split on a colon inside backticks
-    ## i.e. a non-syntactic variable name that contains a colon
-    out <- unique(unlist(strsplit(out, ":(?=([^`]*`[^`]*`)*[^`]*$)",
-                                  perl = TRUE)))
+##     ## add backticks for any var with non-syntactic names
+##     idx1 <- make.names(out, unique = FALSE) != out
+##     ## AND doesn't already have backticks
+##     idx2 <- !grepl("^`.*`$", out)
+##     ## AND doesnt have $ outside backticks
+##     idx3 <- !grepl("[$](?=([^`]*`[^`]*`)*[^`]*$)", out, perl = TRUE)
+##     idx <- idx1 & idx2 & idx3
+## browser()
+##     if (any(idx))
+##         out[idx] <- paste0("`", out[idx], "`")
 
-    ## Need unique() below because of strange behaviour where
-    ## backtick'd response sometimes appears in tl when dot on RHS
-    unique(c(OutcomeName(formula), out))
+    ## need unique() below because of strange behaviour where
+    ## response sometimes appears twice in output (once with
+    ## backticks, once without) when dot on RHS
+    unique(out)
+}
+
+#' @noRd
+#' @param vars A call; the "variables" attribute of a
+#' \code{\link{terms.object}}
+#' @return A character vector of variable names
+parseVars <- function(vars)
+{
+    vars <- vars[-1]  # remove "list" call
+    out <- character(length(vars))
+    ## Need for loop and not lapply to allow check for backticks in parseVar
+    ## The check needs the call (`[`) not the call component (`[[`)
+    for (i in seq_along(vars))
+        out[i] <- parseVar(vars[i])
+    out
+}
+
+#' Parses a component of the variables attribute
+#' of a \code{\link{terms.object}}, which is a call to 'list'
+#' of the variables in the model
+#' @param var A call, a component of the "variables", attribute
+#' of a call to \code{\link[stats]{terms}}
+## @param label A character string, variable label
+#' @return A character string containing the variable name
+#' @importFrom stats as.formula
+#' @noRd
+parseVar <- function(var)
+{
+    ## var[[1L]] can have one of three classes
+    ## 1) in simplest case, var has class "AsIs"; e.g. "x"
+    ## 2)a) if var is backtick'd in formula, it has class "name"; e.g. "`x$y`"
+    ## 2)b) if var is included b/c of "." on RHS of formula, it has class "name"
+    ## 3) if var involves fun. call (including $), it has class "call";
+    ## e.g, "log(x)" or "I(x^2)" or "dat$x"
+    v1 <- var[[1L]]
+    out <- as.character(v1)
+    ## check for backticks
+    if (inherits(v1, "name"))
+    {
+        ## check 1) don't backtick if variable enters through ".",
+        ## but doesn't need backtick
+        ## check 2) don't backtick if already backtick'd
+        if (grepl("^`.*`[(][)]$", deparse(var)) && !grepl("^`.*`$", out))
+            return(paste0("`", out, "`"))
+    }
+    else if (inherits(v1, "call"))
+    {
+        if (length(out) == 3 && out[1] == "$")
+            out <- paste0(out[2], out[1], out[3])
+        else if (length(out) > 1L)
+        {
+            ## deal with e.g. I(log(x)), I(x^2)
+            out <- if (out[1L] == "I")
+                           all.vars(as.formula(paste0("~", out[2L])))
+                       else  # e.g. log(x) with no I
+                           out[2L]
+      }
+    }
+    out
 }
 
 #' Copy attributes from one object to another

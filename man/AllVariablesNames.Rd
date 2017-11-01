@@ -25,4 +25,5 @@ dat <- data.frame("dat$Var$y" = 1, x = 2, "`dat$Var$z`" = 3,
 AllVariablesNames(`dat$Var$y` ~ ., data = dat)
 AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`, data = dat)
 AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`*x)
+AllVariablesNames(log(y)~I(x^2))
 }

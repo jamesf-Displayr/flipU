@@ -1,11 +1,12 @@
-Changes in Version 1.0.4 (2017-11-01)
+Changes in Version 1.0.5 (2017-11-01)
 --------------------------------------------------------
 
 BUG FIXES
 
 * `AllVariablesNames` now correctly handles interactions
 in formulae (DS-1527)
-
+* `AllVariablesNames` now correctly handles function calls
+in formulae, e.g. `y~log(x)+I(x^2)` (DS-1527)
 
 Changes in Version 1.0.3 (2017-10-31)
 --------------------------------------------------------
