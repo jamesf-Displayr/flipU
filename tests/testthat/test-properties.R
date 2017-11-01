@@ -306,3 +306,41 @@ test_that("AllVariablesNames $ + no backticks in formula, data NULL", {
     ## backticks are added to any non-syntactic variable
     expect_equal(out, paste0("dat$", names(dat)))
 })
+
+test_that("AllVariablesNames formula with '-' ", {
+    out <- AllVariablesNames(`a$b$c` ~ a*b - a, data = NULL)
+    ## backticks are added to any non-syntactic variable
+    expect_equal(out, c("`a$b$c`", "b", "a"))
+})
+
+test_that("AllVariablesNames formula with ':' ", {
+    dat <- data.frame(y = 1, x = 2)
+    out <- AllVariablesNames(dat$y ~ dat$x, data = NULL)
+    ## backticks are added to any non-syntactic variable
+    expect_equal(out, paste0("dat$", names(dat)))
+})
+
+test_that("AllVariablesNames formula with ':' and missing main effect", {
+    out <- AllVariablesNames(y~a + a:b, data = NULL)
+    expect_equal(out, c("y", "a", "b"))
+})
+
+
+test_that("AllVariablesNames formula with '^' and '(' ", {
+    out <- AllVariablesNames(y~(`a:b`+c)^2, data = NULL)
+    ## backticks are added to any non-syntactic variable
+    expect_equal(out, c("y", "`a:b`", "c"))
+})
+
+test_that("AllVariablesNames formula with '*' ", {
+    out <- AllVariablesNames(~`a$b$c`*c, data = NULL)
+    ## backticks are added to any non-syntactic variable
+    expect_equal(out, c("`a$b$c`", "c"))
+})
+
+test_that("AllVariablesNames interaction with : in variable name ", {
+    dat <- data.frame(y = 1, "a:b" = 2, c = 3)
+    out <- AllVariablesNames(y~`a:b`+`a:b`:c, data = dat)
+    ## backticks are added to any non-syntactic variable
+    expect_equal(out, c("y" , "`a:b`", "c"))
+})

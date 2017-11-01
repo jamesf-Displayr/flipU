@@ -35,6 +35,13 @@ AllVariablesNames <- function(formula, data = NULL)
     ## are escaped with '\\' in tl, so need to substitute them out.
     out <- gsub("\\\\`", "", tl)
 
+    ## tl contains interactions, need to split them into
+    ## main effects/variables and keep unique ones.
+    ## Complex regex is so we don't split on a colon inside backticks
+    ## i.e. a non-syntactic variable name that contains a colon
+    out <- unique(unlist(strsplit(out, ":(?=([^`]*`[^`]*`)*[^`]*$)",
+                                  perl = TRUE)))
+
     ## Need unique() below because of strange behaviour where
     ## backtick'd response sometimes appears in tl when dot on RHS
     unique(c(OutcomeName(formula), out))

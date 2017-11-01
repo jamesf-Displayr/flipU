@@ -1,3 +1,12 @@
+Changes in Version 1.0.4 (2017-11-01)
+--------------------------------------------------------
+
+BUG FIXES
+
+* `AllVariablesNames` now correctly handles interactions
+in formulae (DS-1527)
+
+
 Changes in Version 1.0.3 (2017-10-31)
 --------------------------------------------------------
 
