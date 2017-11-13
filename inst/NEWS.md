@@ -1,3 +1,12 @@
+Changes in Version 1.0.6 (2017-11-13)
+--------------------------------------------------------
+
+BUG FIXES
+
+* `OutcomeName` again supports the supplied `formula` actually being
+a `terms` object
+
+
 Changes in Version 1.0.6 (2017-11-02)
 --------------------------------------------------------
 

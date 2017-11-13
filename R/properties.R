@@ -80,7 +80,7 @@ parseVar <- function(var)
     ## 2)a) if var is backtick'd in formula, it has class "name"; e.g. "`x$y`"
     ## 2)b) if var is included b/c of "." on RHS of formula, it has class "name"
     ## 3) if var involves fun. call (including $), it has class "call";
-    ## e.g, "log(x)" or "I(x^2)" or "dat$x"
+    ## e.g, "log(x)" or "I(x^2)" or "dat$x" or df[["x"]] or a[1, "var", ]
     v1 <- var[[1L]]
     out <- as.character(v1)
     ## check for backticks
@@ -94,13 +94,27 @@ parseVar <- function(var)
     }
     else if (inherits(v1, "call"))
     {
-        if (length(out) == 3 && out[1] == "$")
-            out <- paste0(out[2], out[1], out[3])
+        if (length(out) == 3L){
+            out <- if (out[1L] == "[")
+                           paste0(out[2L], "[", addQuotesOrComma(var, out[3L]), "]")
+                       else if (out[1L] == "[[")
+                           paste0(out[2L], "[[", addQuotesOrComma(var, out[3L]), "]]")
+                       else  # $; hopefully, nothing else
+                           paste0(out[2L], out[1L], out[3L])
+        }
         else if (length(out) > 1L)
         {
-            ## deal with e.g. I(log(x)), I(x^2)
+            ## deal with e.g. I(log(x)), I(x^2), I(dat$x); strip I and re-parse
             out <- if (out[1L] == "I")
-                           all.vars(as.formula(paste0("~", out[2L])))
+                           parseVar(as.formula(paste0("~", out[2L]))[2L])
+                       else if (out[1L] == "[")
+                           paste0(out[2L], "[", paste(vapply(out[3:length(out)],
+                                                             addQuotesOrComma, "", v = var),
+                                                      collapse = ","), "]")
+                       else if (out[1L] == "[[")  ## unlikely, list extract with multiple indices
+                           paste0(out[2L], "[[", paste(vapply(out[3:length(out)],
+                                                             addQuotesOrComma, "", v = var),
+                                                      collapse = ","), "]]")
                        else  # e.g. log(x) with no I
                            out[2L]
       }
@@ -108,6 +122,20 @@ parseVar <- function(var)
     out
 }
 
+#' For parsing terms involving extraction using [ or [[
+#'
+#' If the term is e.g. df[1, "y", ], then as.character(var[[1L]])
+#' in parseVar is c("df", "[", "1", "y", "")
+#' @noRd
+addQuotesOrComma <- function(v, term)
+{
+    if (grepl("^$", term))  # if empty string, assume term is
+        return("")
+    out <- term
+    if (grepl(paste0("(?:\\\"|\\')", term), deparse(v), perl = TRUE))
+        out <- paste0("'", out, "'")
+    out
+}
 #' Copy attributes from one object to another
 #'
 #' Copies the "label", "name", "question" and "questiontype" attributes
@@ -159,7 +187,8 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
     if (is.list(data.without.attributes))
     {
         for (i in seq_along(data.without.attributes))
-            data.without.attributes[[i]] <- CopyAttributes(data.without.attributes[[i]], data.with.attributes[[i]])
+            data.without.attributes[[i]] <- CopyAttributes(data.without.attributes[[i]],
+                                                           data.with.attributes[[i]])
         return(data.without.attributes)
     }
     # Attention: the vector of attribute names below should be kept up to date

@@ -364,6 +364,19 @@ test_that("AllVariablesNames functions in formula",
     expect_equal(out, c("y", "x", "`a(b`"))
 })
 
+test_that("AllVariablesNames array extraction in formula",
+{
+    out <- AllVariablesNames(y ~ x^2+ arr[1, "z", ])
+    expect_equal(out, c("y", "x", "arr[1,'z',]"))
+})
+
+test_that("AllVariablesNames list extraction in formula",
+{
+    out <- AllVariablesNames(y ~ x + df[["z"]])
+    expect_equal(out, c("y", "x", "df[['z']]"))
+})
+
+
 test_that("OutcomeName function in response",
 {
     out <- OutcomeName(log(response) ~ I(log(x))+ `a(b`)
@@ -372,7 +385,7 @@ test_that("OutcomeName function in response",
 
 test_that("OutcomeName I() in response",
 {
-    out <- OutcomeName(I(y^2) ~ I(log(x))*z)
+    out <- OutcomeName(I(sin(y)) ~ I(log(x))*z)
     expect_equal(out, "y")
 })
 
@@ -386,6 +399,12 @@ test_that("OutcomeName response has $ without backticks",
 {
     out <- OutcomeName(dat$y ~ .)
     expect_equal(out, "dat$y")
+})
+
+test_that("OutcomeName response has [[ without backticks",
+{
+    out <- OutcomeName(dat[["y"]] ~ .)
+    expect_equal(out, "dat[['y']]")
 })
 
 test_that("OutcomeName: supplied formula is a terms object",
