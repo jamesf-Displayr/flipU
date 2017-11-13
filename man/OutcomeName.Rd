@@ -7,7 +7,7 @@
 OutcomeName(formula, data = NULL)
 }
 \arguments{
-\item{formula}{A \code{\link{formula}}.}
+\item{formula}{A \code{\link{formula}} or a \code{\link[stats]{terms}} object.}
 
 \item{data}{A \code{\link{data.frame}} containing the variables in the formula.
 Currently, ignored.}

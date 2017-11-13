@@ -388,3 +388,9 @@ test_that("OutcomeName response has $ without backticks",
     expect_equal(out, "dat$y")
 })
 
+test_that("OutcomeName: supplied formula is a terms object",
+{
+    out <- OutcomeName(terms(y~x))
+    expect_equal(out, "y")
+})
+

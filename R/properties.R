@@ -171,7 +171,7 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
 
 #' Find the name of the outcome variable from a formula
 #'
-#' @param formula A \code{\link{formula}}.
+#' @param formula A \code{\link{formula}} or a \code{\link[stats]{terms}} object.
 #' @param data A \code{\link{data.frame}} containing the variables in the formula.
 #' Currently, ignored.
 #' @return Character string giving the response variable name, or \code{NULL} if
@@ -180,7 +180,11 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
 OutcomeName <- function(formula, data = NULL)
 {
     if (HasOutcome(formula))
+    {
+        if(inherits(formula, "terms"))
+            class(formula) <- formula
         return(parseVar(formula[2]))
+    }
     return(NULL)
 }
 
