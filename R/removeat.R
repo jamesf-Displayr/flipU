@@ -99,7 +99,8 @@ removeFromDimension <- function(x, at = NULL, MARGIN = 1L, ignore.case = TRUE, s
     post.i <- if (MARGIN >= len) "" else paste0(rep(",", len - MARGIN), collapse = "")
     #print(class(x))
     #print(MARGIN)
-    drop <- if(is.data.frame(x) && MARGIN == 1) "" else ", drop = FALSE"
+    #drop <- if(is.data.frame(x) && MARGIN == 1) "" else ", drop = FALSE"
+    drop <- ", drop = FALSE"
     cmnd <- paste0("x[", pre.i, i.string, post.i, drop, "]")
     eval(parse(text = cmnd))
 }

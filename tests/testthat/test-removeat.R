@@ -134,6 +134,17 @@ test_that("RemoveAt: data.frame", {
     expect_equal(as.vector(attributes(out[[1]])$label), "Q6. Pepsi Light" )
     expect_equal(dim(out), c(nrow(dat), 1L))
     expect_equal(attr(out, "statistic"), attr(dat, "statistic"))
+
+    dat2 <- structure(list(Income = structure(c(6L, 6L, 2L, 3L, 3L, 6L, 6L),
+            .Label = c("Less than $15,000", "$15,001 to $30,000",
+            "$30,001 to $45,000", "$60,001 to $90,000", "$90,001 to $120,000",
+            "$120,001 to $150,000", "$150,001 to $200,000", "$200,001 or more"),
+            class = "factor", label = structure("Income", .Names = "d2"))), .Names = "Income",
+            row.names = sprintf("Num %d", 1:7),
+            class = "data.frame", scatter.variable.indices = structure(c(NA, 1, NA, NA),
+            .Names = c("x", "y", "sizes", "colors")))
+    out2 <- RemoveAt(dat2, list(c("NET", "SUM"), c("NET")), 1:2)
+    expect_true(is.data.frame(out2))
 })
 
 
