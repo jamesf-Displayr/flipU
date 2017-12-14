@@ -28,3 +28,19 @@ containsWarning <- function(my.function, string)
     my.matches <- (grep(string, my.warnings))
     return(length(my.matches) > 0)
 }
+
+#' @title InterceptWarnings
+#' @description This function intercepts warning messages produced from running
+#' \code{expr} and passes them to \code{warning.handler}.
+#' @param expr The expression whose warnings are to be intercepted.
+#' @param warning.handler The function that handles intercepted warnings.
+#' @return The value of \code{expr}.
+#' @export
+InterceptWarnings <- function(expr, warning.handler)
+{
+    withCallingHandlers(expr,
+                        warning = function(w) {
+                            warning.handler(w)
+                            invokeRestart("muffleWarning")
+                        })
+}
