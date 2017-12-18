@@ -1,3 +1,15 @@
+Changes in Version 1.2.0 (2017-12-18)
+--------------------------------------------------------
+
+NEW FEATURES
+
+* New function `RemoveAt` for removing elements from an object (such
+  as rows and columns from a matrix)
+* New functions `InterceptWarnings`, `ExpectNoWarning`, and
+  `ExpectNoWarning` for checking for warnings in code/expressions and
+  replacing particular warning messages with alternative messages.
+
+
 Changes in Version 1.0.6 (2017-11-13)
 --------------------------------------------------------
 

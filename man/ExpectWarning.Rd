@@ -4,10 +4,10 @@
 \alias{ExpectWarning}
 \title{\code{ExpectWarning}}
 \usage{
-ExpectWarning(my.function, string)
+ExpectWarning(code, string)
 }
 \arguments{
-\item{my.function}{The function to look for warnings in.}
+\item{code}{The code to evaluate for warnings.}
 
 \item{string}{The string of text to be searched for in the warnings}
 }
