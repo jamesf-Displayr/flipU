@@ -2,7 +2,7 @@
 % Please edit documentation in R/warnings.R
 \name{ExpectNoWarning}
 \alias{ExpectNoWarning}
-\title{\code{ExpectNoWarning}}
+\title{ExpectNoWarning}
 \usage{
 ExpectNoWarning(code, string)
 }
@@ -11,6 +11,18 @@ ExpectNoWarning(code, string)
 
 \item{string}{The string of text to be searched for in the warnings}
 }
+\value{
+Returns NULL. Throws an exception if the code is evaluated and
+the string appears in the warning.
+}
 \description{
-Checks to see if the printing of an object does not cause a warning to appear.
+Checks to see if the printing of an object does not cause a
+warning to appear.
+}
+\examples{
+throwsAWarning <- function()
+{
+    warning("This is a warning")
+}
+ExpectNoWarning(throwsAWarning(), "different warning")
 }

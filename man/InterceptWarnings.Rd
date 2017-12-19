@@ -18,3 +18,16 @@ The value of \code{expr}.
 This function intercepts warning messages produced from running
 \code{expr} and passes them to \code{warning.handler}.
 }
+\examples{
+throwsAWarning <- function()
+{
+    warning("This is a warning")
+}
+addExclamationMark <- function(warn)
+{
+    warning(paste0(warn$message, "!"))
+}
+## Intercepts the warning from throwsAWarning and rethrows it with an
+## exclamation mark.
+InterceptWarnings(throwsAWarning(), addExclamationMark)
+}

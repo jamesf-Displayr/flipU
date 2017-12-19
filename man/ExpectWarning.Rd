@@ -2,15 +2,27 @@
 % Please edit documentation in R/warnings.R
 \name{ExpectWarning}
 \alias{ExpectWarning}
-\title{\code{ExpectWarning}}
+\title{ExpectWarning}
 \usage{
 ExpectWarning(code, string)
 }
 \arguments{
 \item{code}{The code to evaluate for warnings.}
 
-\item{string}{The string of text to be searched for in the warnings}
+\item{string}{The string of text to be searched for in the warnings.}
+}
+\value{
+Returns NULL. Throws an exception if the code is evaluated and no
+warning is thrown or the string does not appear in the warning.
 }
 \description{
-Checks to see if the printing of an object causes warnings to appear.
+Checks to see if the printing of an object causes warnings to
+appear.
+}
+\examples{
+throwsAWarning <- function()
+{
+    warning("This is a warning")
+}
+ExpectWarning(throwsAWarning(), "a warning")
 }
