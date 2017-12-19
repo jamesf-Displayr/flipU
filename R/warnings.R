@@ -55,7 +55,7 @@ containsWarning <- function(code, string)
 #' }
 #' addExclamationMark <- function(warn)
 #' {
-#'     warning(paste0(warn$message, "!"))
+#'     warning(warn$message, "!")
 #' }
 #' ## Intercepts the warning from throwsAWarning and rethrows it with an
 #' ## exclamation mark.
