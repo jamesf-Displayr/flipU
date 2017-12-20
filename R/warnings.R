@@ -36,13 +36,15 @@ ExpectNoWarning <- function(code, string)
     stopifnot(!containsWarning(code, string))
 }
 
+#' @importFrom utils capture.output
+#' @noRd
 containsWarning <- function(code, string)
 {
     my.warnings <- NULL
-    withCallingHandlers(code, warning = function(e){
+    capture.output(withCallingHandlers(print(code), warning = function(e){
         my.warnings <<- c(my.warnings, e$message)
         invokeRestart("muffleWarning")
-        })
+        }))
     any(grepl(string, my.warnings))
 }
 
