@@ -38,9 +38,23 @@ ExpectNoWarning <- function(code, string)
 
 containsWarning <- function(code, string)
 {
-    my.warnings <- tryCatch(code, warning = function(e) e$message)
+    my.warnings <- NULL
+    withCallingHandlers(code, warning = function(e){
+        my.warnings <<- c(my.warnings, e$message)
+        invokeRestart("muffleWarning")
+        })
     any(grepl(string, my.warnings))
 }
+
+containsWarning2 <- function(code, string)
+{
+    my.warnings <- NULL
+    withCallingHandlers(code, warning = function(e){
+e$message
+        })
+    any(grepl(string, my.warnings))
+}
+
 
 #' @title InterceptWarnings
 #' @description This function intercepts warning messages produced from running
