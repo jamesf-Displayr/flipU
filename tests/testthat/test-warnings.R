@@ -7,15 +7,26 @@ test_that("Warnings",
     expect_error(ExpectNoWarning(message("this is just a message, not a warning"), "this"), NA)
 })
 
-test_that("Intercept warnings",
+test_that("Intercept exceptions",
 {
     swapAToB <- function(warn)
     {
         if (warn$message == "A")
             warning("B", call. = FALSE)
-        else
-            warning(warn)
     }
-    expect_silent(ExpectWarning(InterceptWarnings(warning("A", call. = FALSE), swapAToB), "B"))
-    expect_silent(ExpectWarning(InterceptWarnings(warning("C", call. = FALSE), swapAToB), "C"))
+    swapXToY <- function(error)
+    {
+        if (error$message == "X")
+            stop("Y", call. = FALSE)
+    }
+    expect_silent({
+        expect_error({
+            ExpectWarning({
+                InterceptExceptions({
+                    warning("A", call. = FALSE)
+                    stop("X", call. = FALSE)
+                }, warning.handler = swapAToB, error.handler = swapXToY)
+                }, "B")
+        },"Y")
+    })
 })

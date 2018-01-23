@@ -58,30 +58,49 @@ e$message
 }
 
 
-#' @title InterceptWarnings
-#' @description This function intercepts warning messages produced from running
-#' \code{expr} and passes them to \code{warning.handler}.
+#' @title InterceptExceptions
+#' @description This function intercepts warning and error messages produced
+#' from running \code{expr} and passes them to \code{warning.handler} and
+#' \code{error.handler}. Note that execution of expr is stopped after the
+#' first error.
 #' @param expr The expression whose warnings are to be intercepted.
 #' @param warning.handler The function that handles intercepted warnings.
-#' @return The value of \code{expr}.
+#' @param error.handler The function that handles intercepted errors.
+#' @return The value from evaluating \code{expr}.
 #' @examples
-#' throwsAWarning <- function()
-#' {
-#'     warning("This is a warning")
-#' }
 #' addExclamationMark <- function(warn)
 #' {
 #'     warning(warn$message, "!")
 #' }
-#' ## Intercepts the warning from throwsAWarning and rethrows it with an
+#' ## Intercepts a warning and rethrows it with an
 #' ## exclamation mark.
-#' InterceptWarnings(throwsAWarning(), addExclamationMark)
+#' InterceptExceptions(warning("This is a warning"),
+#'                     warning.handler = addExclamationMark)
+#'
+#' addQuestionMark <- function(error)
+#' {
+#'     warning(error$message, "?")
+#' }
+#' ## Intercepts the error from throwsAWarning and rethrows it with an
+#' ## exclamation mark.
+#' InterceptExceptions(stop("Stop"), error.handler = addQuestionMark)
 #' @export
-InterceptWarnings <- function(expr, warning.handler)
+InterceptExceptions <- function(expr, warning.handler = NULL,
+                                error.handler = NULL)
 {
-    withCallingHandlers(expr,
+    withCallingHandlers(withRestarts(expr, muffleStop = function() NULL),
                         warning = function(w) {
-                            warning.handler(w)
-                            invokeRestart("muffleWarning")
+                            if (!is.null(warning.handler))
+                            {
+                                warning.handler(w)
+                                invokeRestart("muffleWarning")
+                            }
+                        },
+                        error = function(e) {
+                            if (!is.null(error.handler))
+                            {
+                                error.handler(e)
+                                invokeRestart("muffleStop")
+                            }
                         })
 }
