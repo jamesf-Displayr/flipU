@@ -15,6 +15,8 @@ AllIntegers <- function(x)
 #' @param formula A \code{\link{formula}}.
 #' @param data A \code{\link{data.frame}} from which to extract variable
 #' names if \code{.} is used in the formula.
+#' @param remove.backticks Logical; whether backticks surrounding names should
+#' be removed.
 #' @return A character vector of variable names appearing in \code{formula}.
 #' @export
 #' @importFrom stats terms
@@ -25,7 +27,7 @@ AllIntegers <- function(x)
 #' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`, data = dat)
 #' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`*x)
 #' AllVariablesNames(log(y)~I(x^2))
-AllVariablesNames <- function(formula, data = NULL)
+AllVariablesNames <- function(formula, data = NULL, remove.backticks = TRUE)
 {
     terms <- stats::terms(formula, data = data, keep.order = TRUE)
     vars <- attr(terms, "variables")
@@ -46,7 +48,10 @@ AllVariablesNames <- function(formula, data = NULL)
     ## need unique() below because of strange behaviour where
     ## response sometimes appears twice in output (once with
     ## backticks, once without) when dot on RHS
-    unique(out)
+    out <- unique(out)
+    if (remove.backticks)
+        out <- RemoveBackticks(out)
+    out
 }
 
 #' @noRd
@@ -203,8 +208,8 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
 #' @param formula A \code{\link{formula}} or a \code{\link[stats]{terms}} object.
 #' @param data A \code{\link{data.frame}} containing the variables in the formula.
 #' Currently, ignored.
-#' @return Character string giving the response variable name, or \code{NULL} if
-#' no response is present in \code{formula}.
+#' @return Character string giving the response variable name with backticks removed,
+#' or \code{NULL} if no response is present in \code{formula}.
 #' @export
 OutcomeName <- function(formula, data = NULL)
 {
@@ -212,7 +217,7 @@ OutcomeName <- function(formula, data = NULL)
     {
         if(inherits(formula, "terms"))
             class(formula) <- formula
-        return(parseVar(formula[2]))
+        return(RemoveBackticks(parseVar(formula[2])))
     }
     return(NULL)
 }
@@ -311,3 +316,14 @@ AnyNA <- function(data, formula = NULL)
     }
     any(is.na(data))
 }
+
+#' \code{RemoveBackticks}
+#' @description Removes backticks surrounding variable names.
+#' @param nms Vector of variable names.
+#' @export
+RemoveBackticks <- function(nms)
+{
+    ## DS-1769 causes the nasty setting of the perl argument depending on platform.
+    sub("^[`]([[:print:]]*)[`]$", "\\1", nms, perl = (Sys.info()["sysname"] == "Windows"))
+}
+
