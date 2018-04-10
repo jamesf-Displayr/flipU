@@ -13,8 +13,8 @@ OutcomeName(formula, data = NULL)
 Currently, ignored.}
 }
 \value{
-Character string giving the response variable name, or \code{NULL} if
-no response is present in \code{formula}.
+Character string giving the response variable name with backticks removed,
+or \code{NULL} if no response is present in \code{formula}.
 }
 \description{
 Find the name of the outcome variable from a formula

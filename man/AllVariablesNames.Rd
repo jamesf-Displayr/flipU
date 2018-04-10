@@ -4,13 +4,16 @@
 \alias{AllVariablesNames}
 \title{Find the names of the variables in a formula}
 \usage{
-AllVariablesNames(formula, data = NULL)
+AllVariablesNames(formula, data = NULL, remove.backticks = TRUE)
 }
 \arguments{
 \item{formula}{A \code{\link{formula}}.}
 
 \item{data}{A \code{\link{data.frame}} from which to extract variable
 names if \code{.} is used in the formula.}
+
+\item{remove.backticks}{Logical; whether backticks surrounding names should
+be removed.}
 }
 \value{
 A character vector of variable names appearing in \code{formula}.
