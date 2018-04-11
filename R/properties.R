@@ -15,8 +15,6 @@ AllIntegers <- function(x)
 #' @param formula A \code{\link{formula}}.
 #' @param data A \code{\link{data.frame}} from which to extract variable
 #' names if \code{.} is used in the formula.
-#' @param remove.backticks Logical; whether backticks surrounding names should
-#' be removed.
 #' @return A character vector of variable names appearing in \code{formula}.
 #' @export
 #' @importFrom stats terms
@@ -27,31 +25,28 @@ AllIntegers <- function(x)
 #' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`, data = dat)
 #' AllVariablesNames(`dat$Var$y` ~ `dat$Var$z`*x)
 #' AllVariablesNames(log(y)~I(x^2))
-AllVariablesNames <- function(formula, data = NULL, remove.backticks = TRUE)
+AllVariablesNames <- function(formula, data = NULL)
 {
     terms <- stats::terms(formula, data = data, keep.order = TRUE)
     vars <- attr(terms, "variables")
 
     out <- parseVars(vars)
 
-##     ## add backticks for any var with non-syntactic names
-##     idx1 <- make.names(out, unique = FALSE) != out
-##     ## AND doesn't already have backticks
-##     idx2 <- !grepl("^`.*`$", out)
-##     ## AND doesnt have $ outside backticks
-##     idx3 <- !grepl("[$](?=([^`]*`[^`]*`)*[^`]*$)", out, perl = TRUE)
-##     idx <- idx1 & idx2 & idx3
-## browser()
-##     if (any(idx))
-##         out[idx] <- paste0("`", out[idx], "`")
+    ##     ## add backticks for any var with non-syntactic names
+    ##     idx1 <- make.names(out, unique = FALSE) != out
+    ##     ## AND doesn't already have backticks
+    ##     idx2 <- !grepl("^`.*`$", out)
+    ##     ## AND doesnt have $ outside backticks
+    ##     idx3 <- !grepl("[$](?=([^`]*`[^`]*`)*[^`]*$)", out, perl = TRUE)
+    ##     idx <- idx1 & idx2 & idx3
+    ## browser()
+    ##     if (any(idx))
+    ##         out[idx] <- paste0("`", out[idx], "`")
 
     ## need unique() below because of strange behaviour where
     ## response sometimes appears twice in output (once with
     ## backticks, once without) when dot on RHS
-    out <- unique(out)
-    if (remove.backticks)
-        out <- RemoveBackticks(out)
-    out
+    unique(out)
 }
 
 #' @noRd
@@ -101,28 +96,28 @@ parseVar <- function(var)
     {
         if (length(out) == 3L){
             out <- if (out[1L] == "[")
-                           paste0(out[2L], "[", addQuotesOrComma(var, out[3L]), "]")
-                       else if (out[1L] == "[[")
-                           paste0(out[2L], "[[", addQuotesOrComma(var, out[3L]), "]]")
-                       else  # $; hopefully, nothing else
-                           paste0(out[2L], out[1L], out[3L])
+                paste0(out[2L], "[", addQuotesOrComma(var, out[3L]), "]")
+            else if (out[1L] == "[[")
+                paste0(out[2L], "[[", addQuotesOrComma(var, out[3L]), "]]")
+            else  # $; hopefully, nothing else
+                paste0(out[2L], out[1L], out[3L])
         }
         else if (length(out) > 1L)
         {
             ## deal with e.g. I(log(x)), I(x^2), I(dat$x); strip I and re-parse
             out <- if (out[1L] == "I")
-                           parseVar(as.formula(paste0("~", out[2L]))[2L])
-                       else if (out[1L] == "[")
-                           paste0(out[2L], "[", paste(vapply(out[3:length(out)],
-                                                             addQuotesOrComma, "", v = var),
-                                                      collapse = ","), "]")
-                       else if (out[1L] == "[[")  ## unlikely, list extract with multiple indices
-                           paste0(out[2L], "[[", paste(vapply(out[3:length(out)],
-                                                             addQuotesOrComma, "", v = var),
-                                                      collapse = ","), "]]")
-                       else  # e.g. log(x) with no I
-                           out[2L]
-      }
+                parseVar(as.formula(paste0("~", out[2L]))[2L])
+            else if (out[1L] == "[")
+                paste0(out[2L], "[", paste(vapply(out[3:length(out)],
+                                                  addQuotesOrComma, "", v = var),
+                                           collapse = ","), "]")
+            else if (out[1L] == "[[")  ## unlikely, list extract with multiple indices
+                paste0(out[2L], "[[", paste(vapply(out[3:length(out)],
+                                                   addQuotesOrComma, "", v = var),
+                                            collapse = ","), "]]")
+            else  # e.g. log(x) with no I
+                out[2L]
+        }
     }
     out
 }
@@ -208,8 +203,8 @@ copyAttributesOld <- function(data.without.attributes, data.with.attributes)
 #' @param formula A \code{\link{formula}} or a \code{\link[stats]{terms}} object.
 #' @param data A \code{\link{data.frame}} containing the variables in the formula.
 #' Currently, ignored.
-#' @return Character string giving the response variable name with backticks removed,
-#' or \code{NULL} if no response is present in \code{formula}.
+#' @return Character string giving the response variable name, or \code{NULL} if
+#' no response is present in \code{formula}.
 #' @export
 OutcomeName <- function(formula, data = NULL)
 {
@@ -217,7 +212,7 @@ OutcomeName <- function(formula, data = NULL)
     {
         if(inherits(formula, "terms"))
             class(formula) <- formula
-        return(RemoveBackticks(parseVar(formula[2])))
+        return(parseVar(formula[2]))
     }
     return(NULL)
 }
@@ -316,14 +311,3 @@ AnyNA <- function(data, formula = NULL)
     }
     any(is.na(data))
 }
-
-#' \code{RemoveBackticks}
-#' @description Removes backticks surrounding variable names.
-#' @param nms Vector of variable names.
-#' @export
-RemoveBackticks <- function(nms)
-{
-    ## DS-1769 causes the nasty setting of the perl argument depending on platform.
-    sub("^[`]([[:print:]]*)[`]$", "\\1", nms, perl = (Sys.info()["sysname"] == "Windows"))
-}
-
