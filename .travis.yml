@@ -46,5 +46,5 @@ notifications:
 # committing a new change to .travis.yml in each repository
 after_success: 
   - Rscript -e "require(flipDevTools); NotifyWarnings(); TriggerDownstreamBuilds()"
-  - travis_wait Rscript -e "goodpractice::gp(checks = goodpractice::all_checks()[!grepl('^rcmdcheck', goodpractice::all_checks())])"
+  - travis_wait Rscript -e "goodpractice::gp('flipU', checks = goodpractice::all_checks()[!grepl('^rcmdcheck', goodpractice::all_checks())])"
 #  - travis_wait Rscript -e "flipDevTools::CheckCoverage()"
