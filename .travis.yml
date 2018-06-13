@@ -3,7 +3,7 @@ r:
   - release
 dist: trusty
 sudo: required
-cache: false
+cache: true
 warnings_are_errors: false
 
 # install debian libraries to match R-servers
