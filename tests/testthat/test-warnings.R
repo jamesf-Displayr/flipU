@@ -30,3 +30,7 @@ test_that("Intercept exceptions",
         },"Y")
     })
 })
+
+stop("You called stop()")
+
+expect_warning("print hi", "bigbadwarning")
