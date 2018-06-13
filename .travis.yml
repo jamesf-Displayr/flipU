@@ -13,7 +13,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libgdal-dev libproj-dev python-protobuf libprotoc-dev libprotobuf-dev libv8-dev librsvg2-dev
   - rcode="tfile <- tempfile(); capture.output(res<-devtools::test(), file = tfile); "
-  - rcode+='out <- readLines(tfile); n.fail <- as.numeric(sub("Failed:\\s", "", out[grep("Failed:\\s", out)])); '
+  - rcode+="out <- readLines(tfile); n.fail <- as.numeric(sub('Failed:\\s', '', out[grep('Failed:\\s', out)])); "
   - rcode+="write.csv(as.data.frame(res), file='test_results.csv'); "
   - rcode+="quit(status=n.fail, save='no');"
 
