@@ -9,6 +9,6 @@
 CheckVariableLengths <- function(variable.list, list.name)
 {
     if (length(unique(sapply(variable.list, length))) > 1)
-        stop("The ", list.name , " have differing lengths. Please ensure ",
+        stop(list.name , " have differing lengths. Please ensure ",
              "that they are from the same data set or have the same length.")
 }
