@@ -120,6 +120,7 @@ indicesToRetain <- function(names, at, length.x, ignore.case = TRUE, split = NUL
     if (is.character(at))
     {
         at <- trimws(at)
+        at <- gsub("[^\x20-\x7E]", "", at)
         if (ignore.case)
         {
             at <- tolower(at)

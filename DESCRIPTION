@@ -12,3 +12,4 @@ Imports:
 Suggests:
     testthat    
 RoxygenNote: 6.1.0
+Encoding: UTF-8
