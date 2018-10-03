@@ -119,8 +119,7 @@ indicesToRetain <- function(names, at, length.x, ignore.case = TRUE, split = NUL
     # 'at' is character and able to represent a variable
     if (is.character(at))
     {
-        at <- trimws(at)
-        at <- gsub("[^\x20-\x7E]", "", at)
+        at <- TrimWhitespace(at)
         if (ignore.case)
         {
             at <- tolower(at)

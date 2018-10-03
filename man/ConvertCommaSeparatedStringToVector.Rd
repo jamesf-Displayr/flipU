@@ -15,5 +15,5 @@ ConvertCommaSeparatedStringToVector(string, split = ",")
 A \code{vector} of \code{character}s.
 }
 \description{
-Converts a string containing commas into a vector, trimming whistepaces along the way.
+Converts a string containing commas into a vector, trimming whitepaces along the way.
 }
