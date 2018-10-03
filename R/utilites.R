@@ -23,7 +23,7 @@ TrimLeadingWhitespace <- function (x) {
     if (length(x) > 1)
         return(as.vector(unlist(sapply(x, TrimLeadingWhitespace))))
 
-    x <- gsub("\xA0", " ", x)
+    x <- gsub("\\xA0", " ", x)
     result <- gsub("^\\s+", "", x)
     if (is.null(names(x)))
         names(result) <- NULL
@@ -42,7 +42,7 @@ TrimTrailingWhitespace <- function (x) {
     if (length(x) > 1)
         return(as.vector(unlist(sapply(x, TrimTrailingWhitespace))))
 
-    x <- gsub("\xA0", " ", x)
+    x <- gsub("\\xA0", " ", x)
     result <- gsub("\\s+$", "", x)
     if (is.null(names(x)))
         names(result) <- NULL
@@ -64,7 +64,7 @@ TrimWhitespace <- function (x){
 
     # Convert non-breaking (hexcode: A0) space to normal space
     # In Windows, this automatically matches white space (\s) but not in Ubuntu
-    x <- gsub("\xA0", " ", x)
+    x <- gsub("\\xA0", " ", x)
     result <- gsub("^\\s+|\\s+$", "", x)
     if (is.null(names(x)))
         names(result) <- NULL
