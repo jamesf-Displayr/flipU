@@ -18,7 +18,7 @@ ConvertCommaSeparatedStringToVector <- function(string, split = ",",
     split.text <- unlist(strsplit(string, split))
 
     result <- character(0)
-    if (!is.null(text.qualifier))
+    if (!is.null(text.qualifier) && length(split.text) > 0)
     {
         matches <- gregexpr(split, string)
         delim <- sapply(matches[[1]], function (x) {
