@@ -10,6 +10,19 @@ test_that("ConvertCommaSeparatedStringToVector",
               expect_equal(nchar(ConvertCommaSeparatedStringToVector(xx)), c(3,5,3,9))
           })
 
+test_that("ConvertCommaSeparatedStringToVector with text qualifier",
+{
+    expect_equal(ConvertCommaSeparatedStringToVector("alfa, \"bravo\", charlie",
+                                                     text.qualifier = "\""),
+                                                     c("alfa", "bravo", "charlie"))
+    expect_equal(ConvertCommaSeparatedStringToVector("alfa, \"bravo, char\"lie",
+                                                     text.qualifier = "\""),
+                                                     c("alfa", "\"bravo", "char\"lie"))
+    expect_equal(ConvertCommaSeparatedStringToVector("\",alfa\", \"br , a , vo\", \"char,lie,\"",
+                                                     text.qualifier = "\""),
+                                                     c(",alfa", "br , a , vo", "char,lie,"))
+})
+
 test_that("Trim white space",
           {
               expect_equal(TrimLeadingWhitespace("        Big dog         "), "Big dog         ")

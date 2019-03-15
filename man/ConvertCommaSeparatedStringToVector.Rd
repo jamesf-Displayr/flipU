@@ -4,16 +4,25 @@
 \alias{ConvertCommaSeparatedStringToVector}
 \title{\code{ConvertCommaSeparatedStringToVector}}
 \usage{
-ConvertCommaSeparatedStringToVector(string, split = ",")
+ConvertCommaSeparatedStringToVector(string, split = ",",
+  text.qualifier = NULL)
 }
 \arguments{
 \item{string}{A \code{\link{character}} to be converted.}
 
-\item{split}{A \code{\link{character}} vector containing regular expressions to be used in splitting. Where multiple entries are in the vector they are recycled along the vector of \code{string} (i.e., they are not all used as delimiters).}
+\item{split}{A \code{\link{character}} vector containing regular expressions
+to be used in splitting. Where multiple entries are in the vector they are
+recycled along the vector of \code{string} (i.e., they are not all used as
+delimiters).}
+
+\item{text.qualifier}{A character that is placed at the start and end of
+text (after the start split and before the end split), so that it is never
+split even if it contains the split character.}
 }
 \value{
 A \code{vector} of \code{character}s.
 }
 \description{
-Converts a string containing commas into a vector, trimming whitepaces along the way.
+Converts a string containing commas into a vector, trimming whitepaces along
+the way.
 }

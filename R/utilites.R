@@ -1,14 +1,87 @@
 #' \code{ConvertCommaSeparatedStringToVector}
 #'
-#' Converts a string containing commas into a vector, trimming whitepaces along the way.
+#' Converts a string containing commas into a vector, trimming whitepaces along
+#' the way.
 #' @param string A \code{\link{character}} to be converted.
-#' @param split A \code{\link{character}} vector containing regular expressions to be used in splitting. Where multiple entries are in the vector they are recycled along the vector of \code{string} (i.e., they are not all used as delimiters).
+#' @param split A \code{\link{character}} vector containing regular expressions
+#'   to be used in splitting. Where multiple entries are in the vector they are
+#'   recycled along the vector of \code{string} (i.e., they are not all used as
+#'   delimiters).
+#' @param text.qualifier A character that is placed at the start and end of
+#'   text (after the start split and before the end split), so that it is never
+#'   split even if it contains the split character.
 #' @return A \code{vector} of \code{character}s.
 #' @export
-ConvertCommaSeparatedStringToVector <- function(string, split = ",")
+ConvertCommaSeparatedStringToVector <- function(string, split = ",",
+                                                text.qualifier = NULL)
 {
-    comma.delimited <- unlist(strsplit(string, split))
-    return(TrimWhitespace(comma.delimited))
+    split.text <- unlist(strsplit(string, split))
+
+    result <- character(0)
+    if (!is.null(text.qualifier))
+    {
+        matches <- gregexpr(split, string)
+        delim <- sapply(matches[[1]], function (x) {
+            substr(string, x, x)
+        })
+
+        n.parts <- length(split.text)
+        open.quote.index <- NA
+        for (i in 1:n.parts)
+        {
+            t <- TrimWhitespace(split.text[i])
+            nc <- nchar(t)
+            if (is.na(open.quote.index))
+            {
+                if (substr(t, 1, 1) == "\"")
+                {
+                    if (nc > 1 && substr(t, nc, nc) == "\"")
+                        result <- c(result, substr(t, 2, nc - 1))
+                    else
+                        open.quote.index <- i
+                }
+                else
+                    result <- c(result, t)
+            }
+            else if (substr(t, nc, nc) == "\"")
+            {
+                composite <- paste0(split.text[open.quote.index:i],
+                                    c(delim[open.quote.index:(i - 1)], ""),
+                                    collapse = "")
+                composite <- TrimWhitespace(composite)
+                composite <- substr(composite, 2, nchar(composite) - 1)
+                result <- c(result, composite)
+                open.quote.index <- NA
+            }
+        }
+        if (!is.na(open.quote.index)) # quotes never closed
+            result <- c(result, split.text[open.quote.index:n.parts])
+    }
+    else
+        result <- split.text
+
+    return(TrimWhitespace(result))
+}
+
+#' \code{UniquePlaceholders}
+#'
+#' Generates a vector of unique alphanumeric characters, which can be used as
+#' placeholders in text manipulation.
+#' @param n.placeholders The length of the vector.
+#' @param n.characters The number of characters in each entry.
+#' @return A vector of unique alphanumeric characters.
+#' @export
+UniquePlaceholders <- function(n.placeholders, n.characters = 64)
+{
+    result <- character(0)
+    while (length(result) < n.placeholders)
+    {
+        candidate <- paste0(sample(c(LETTERS, letters, 0:9), 64, TRUE),
+                            collapse = "")
+        if (!(candidate %in% result)) # unlikely false but check anyway
+            result <- c(result, candidate)
+    }
+    result
 }
 
 #' \code{TrimLeadingWhitespace}
