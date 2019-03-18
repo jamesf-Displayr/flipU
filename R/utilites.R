@@ -63,6 +63,50 @@ ConvertCommaSeparatedStringToVector <- function(string, split = ",",
     return(TrimWhitespace(result))
 }
 
+#' \code{ParseTextList}
+#'
+#' Parse a string of the form "pet: cat, dog, rat", i.e., list name followed
+#' by a colon and a comma-separated list of elements.
+#'
+#' @param string A \code{\link{character}} to be converted.
+#' @return A list containing the name and elements.
+#' @export
+ParseTextList <- function(string)
+{
+    error.msg <- paste0("Input \"", string, "\" is not in the correct format.")
+
+    matches <- gregexpr("^\\s*\".*?\"\\s*:", string, perl = TRUE)
+    if (matches[[1]] != -1)
+    {
+        match.length <- attr(matches[[1]], "match.length")
+        name <- TrimWhitespace(substr(string, 1, match.length - 1))
+        name <- substr(name, 2, nchar(name) - 1) # remove double quotes
+        element.string <- substr(string, match.length + 1, nchar(string))
+    }
+    else
+    {
+        matches <- gregexpr("^.*?:", string)
+        if (matches[[1]] != -1)
+        {
+            match.length <- attr(matches[[1]], "match.length")
+            name <- TrimWhitespace(substr(string, 1, match.length - 1))
+            element.string <- substr(string, match.length + 1, nchar(string))
+        }
+        else
+            stop(error.msg)
+    }
+
+    if (nchar(name) == 0)
+        stop(error.msg)
+
+    if (nchar(element.string) > 0)
+        elements <- ConvertCommaSeparatedStringToVector(element.string)
+    else
+        stop(error.msg)
+
+    list(name = name, elements = elements)
+}
+
 #' \code{UniquePlaceholders}
 #'
 #' Generates a vector of unique alphanumeric characters, which can be used as
