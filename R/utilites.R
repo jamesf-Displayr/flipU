@@ -73,8 +73,6 @@ ConvertCommaSeparatedStringToVector <- function(string, split = ",",
 #' @export
 ParseTextList <- function(string)
 {
-    error.msg <- paste0("Input \"", string, "\" is not in the correct format.")
-
     matches <- gregexpr("^\\s*\".*?\"\\s*:", string, perl = TRUE)
     if (matches[[1]] != -1)
     {
@@ -93,17 +91,13 @@ ParseTextList <- function(string)
             element.string <- substr(string, match.length + 1, nchar(string))
         }
         else
-            stop(error.msg)
+        {
+            name <- charcter(0)
+            element.string <- character(0)
+        }
     }
 
-    if (nchar(name) == 0)
-        stop(error.msg)
-
-    if (nchar(element.string) > 0)
-        elements <- ConvertCommaSeparatedStringToVector(element.string)
-    else
-        stop(error.msg)
-
+    elements <- ConvertCommaSeparatedStringToVector(element.string)
     list(name = name, elements = elements)
 }
 
