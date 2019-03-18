@@ -14,5 +14,6 @@ A list containing the name and elements.
 }
 \description{
 Parse a string of the form "pet: cat, dog, rat", i.e., list name followed
-by a colon and a comma-separated list of elements.
+by a colon and a comma-separated list of elements. Double quotes are used
+to escape : and ,
 }

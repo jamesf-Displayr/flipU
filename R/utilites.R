@@ -66,7 +66,8 @@ ConvertCommaSeparatedStringToVector <- function(string, split = ",",
 #' \code{ParseTextList}
 #'
 #' Parse a string of the form "pet: cat, dog, rat", i.e., list name followed
-#' by a colon and a comma-separated list of elements.
+#' by a colon and a comma-separated list of elements. Double quotes are used
+#' to escape : and ,
 #'
 #' @param string A \code{\link{character}} to be converted.
 #' @return A list containing the name and elements.
@@ -97,7 +98,8 @@ ParseTextList <- function(string)
         }
     }
 
-    elements <- ConvertCommaSeparatedStringToVector(element.string)
+    elements <- ConvertCommaSeparatedStringToVector(element.string,
+                                                    text.qualifier = "\"")
     list(name = name, elements = elements)
 }
 
