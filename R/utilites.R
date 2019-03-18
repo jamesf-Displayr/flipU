@@ -93,7 +93,7 @@ ParseTextList <- function(string)
         }
         else
         {
-            name <- charcter(0)
+            name <- character(0)
             element.string <- character(0)
         }
     }

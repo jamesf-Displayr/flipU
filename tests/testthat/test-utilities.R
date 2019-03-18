@@ -23,6 +23,16 @@ test_that("ConvertCommaSeparatedStringToVector with text qualifier",
                                                      c(",alfa", "br , a , vo", "char,lie,"))
 })
 
+test_that("ConvertCommaSeparatedStringToVector with text qualifier",
+{
+    expect_equal(ParseTextList("pet: cat, dog, rat"),
+                 list(name = "pet", elements = c("cat", "dog", "rat")))
+    expect_equal(ParseTextList("\"p: et\": cat, \"d, og\", rat"),
+                 list(name = "p: et", elements = c("cat", "d, og", "rat")))
+    expect_equal(ParseTextList(":"), list(name = "", elements = character(0)))
+    expect_equal(ParseTextList(""), list(name = character(0), elements = character(0)))
+})
+
 test_that("Trim white space",
           {
               expect_equal(TrimLeadingWhitespace("        Big dog         "), "Big dog         ")
