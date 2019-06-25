@@ -24,7 +24,7 @@
 #' @export
 RemoveByName <- function(x, rnames, sep = "[;,]")
 {
-    if (!length(rnames) || !nzchar(rnames))
+    if (!length(rnames) || !all(nzchar(rnames)))
         return(x)
 
     rnames <- if(is.list(rnames))

@@ -132,7 +132,7 @@ indicesToRetain <- function(names, at, length.x, ignore.case = TRUE, split = NUL
     # 'at' is numeric
     if (AllIntegers(at))
     {
-        if (any(is.na(at) || at < 1))
+        if (any(is.na(at) | at < 1))
             stop("'at' must contain integers.")
         if (max(at) > length.x)
             stop("'at' contains a value of ", max(at), " which is bigger than the length of 'x'." )
