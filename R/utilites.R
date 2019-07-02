@@ -109,9 +109,10 @@ ParseTextList <- function(string)
 #' placeholders in text manipulation.
 #' @param n.placeholders The length of the vector.
 #' @param n.characters The number of characters in each entry.
+#' @param padding Prefix and suffix characters for the placeholders.
 #' @return A vector of unique alphanumeric characters.
 #' @export
-UniquePlaceholders <- function(n.placeholders, n.characters = 64)
+UniquePlaceholders <- function(n.placeholders, n.characters = 64, padding = "")
 {
     result <- character(0)
     while (length(result) < n.placeholders)
@@ -121,7 +122,7 @@ UniquePlaceholders <- function(n.placeholders, n.characters = 64)
         if (!(candidate %in% result)) # unlikely false but check anyway
             result <- c(result, candidate)
     }
-    result
+    paste0(padding, result, padding)
 }
 
 #' \code{TrimLeadingWhitespace}

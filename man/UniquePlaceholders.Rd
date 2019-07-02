@@ -4,12 +4,14 @@
 \alias{UniquePlaceholders}
 \title{\code{UniquePlaceholders}}
 \usage{
-UniquePlaceholders(n.placeholders, n.characters = 64)
+UniquePlaceholders(n.placeholders, n.characters = 64, padding = "")
 }
 \arguments{
 \item{n.placeholders}{The length of the vector.}
 
 \item{n.characters}{The number of characters in each entry.}
+
+\item{padding}{Prefix and suffix characters for the placeholders.}
 }
 \value{
 A vector of unique alphanumeric characters.
