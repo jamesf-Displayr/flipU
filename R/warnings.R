@@ -1,3 +1,28 @@
+#' Collect warnings and just warn once.
+#'
+#' @param expr R expression
+#' @param return.list When \code{TRUE} return a list with
+#'     list(object,warnings) instead of issuing the warnings.
+#'     Otherwise, when \code{FALSE} issue the warnings and return the
+#'     object.
+#' @return The value of the expression or a list with the value of
+#'     the expression and a list of warning messages
+#' @export
+CollectWarnings <- function(expr, return.list = FALSE){
+    ws <- c()
+    this.env <- environment()
+    result <- suppressWarnings(withCallingHandlers(expr,
+                warning = function(w){assign("ws", unique(c(w$message, ws)), this.env)}))
+    if (return.list)
+        return(list(result, ws))
+    else
+    {
+        for (w in ws)
+            warning(w)
+        return(result)
+    }
+}
+
 #' @title ExpectWarning
 #' @description Checks to see if the printing of an object causes warnings to
 #' appear.

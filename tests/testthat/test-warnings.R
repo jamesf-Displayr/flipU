@@ -7,6 +7,19 @@ test_that("Warnings",
     expect_error(ExpectNoWarning(message("this is just a message, not a warning"), "this"), NA)
 })
 
+test_that("Collect Warnings",
+{
+    foo <- function()
+    {
+        for(cc in letters[1:10])
+            as.numeric(cc)
+        return(NULL)
+    }
+    expect_warning(CollectWarnings(foo()), "NAs introduced by coercion")
+    expect_error(res <- CollectWarnings(foo(), return.list = TRUE), NA)
+    expect_equal(length(res[[2]]), 1)
+})
+
 test_that("Intercept exceptions",
 {
     swapAToB <- function(warn)
