@@ -11,10 +11,16 @@
 #'   text (after the start split and before the end split), so that it is never
 #'   split even if it contains the split character.
 #' @return A \code{vector} of \code{character}s.
+#' @importFrom utils localeToCharset
 #' @export
 ConvertCommaSeparatedStringToVector <- function(string, split = ",",
                                                 text.qualifier = NULL)
 {
+    # Substitute smart quotes for normal quotes
+    patt <- if ("UTF-8" %in% localeToCharset()) '[\u201C\u201D\u201E]'  # linux (utf-8 encoding)
+            else                                '[\x93\x94\x84]'        # windows (latin-1)
+    string <- gsub(patt, "\"", string)
+
     split.text <- unlist(strsplit(string, split))
 
     result <- character(0)

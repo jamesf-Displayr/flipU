@@ -9,13 +9,13 @@ for (i in 1:5)
 
 test_that("AnyNA",
           {
-              expect_that(AnyNA(dat), is_true())
-              expect_that(AnyNA(dat[11:20,]), is_false())
-              expect_that(AnyNA(dat[3:20, ], c ~ a + b), is_true())
-              expect_that(AnyNA(dat[3:20, ], ~ a + b + c + d), is_true())
-              expect_that(AnyNA(dat[3:20, ], a ~ b), is_false())
-              expect_that(AnyNA(dat[3:20, ], ~ a + b), is_false())
-              expect_that(AnyNA(dat[3:20, ], ~ a + b), is_false())
+              expect_true(AnyNA(dat))
+              expect_false(AnyNA(dat[11:20,]))
+              expect_true(AnyNA(dat[3:20, ], c ~ a + b))
+              expect_true(AnyNA(dat[3:20, ], ~ a + b + c + d))
+              expect_false(AnyNA(dat[3:20, ], a ~ b))
+              expect_false(AnyNA(dat[3:20, ], ~ a + b))
+              expect_false(AnyNA(dat[3:20, ], ~ a + b))
           })
 
 test_that("CopyAttributes",
