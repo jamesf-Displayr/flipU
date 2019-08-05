@@ -191,5 +191,25 @@ TrimWhitespace <- function (x){
     result
 }
 
+#' De-duplicate names by appending characters
+#'
+#' This is similar to \code{make.unique} but is useful for making less ugly names
+#' @param names A character vector
+#' @param suffix A character string to append to de-duplicated name.
+#'   If name with the suffix is already used then another copy of the suffix is added.
+#' @export
+MakeUniqueNames <- function(names, suffix = " ")
+{
+    ind.dup <- which(duplicated(names))
+    for (i in ind.dup)
+    {
+        new.name <- paste0(names[i], suffix)
+        while(i > 2 && any(names[1:(i-1)] == new.name))
+            new.name <- paste0(new.name, suffix)
+        names[i] <- new.name
+    }
+    return(names)
+}
+
 
 

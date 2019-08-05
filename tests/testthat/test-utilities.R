@@ -39,3 +39,8 @@ test_that("Trim white space",
               expect_equal(TrimTrailingWhitespace("        Big dog         "), "        Big dog")
               expect_equal(TrimWhitespace("        Big dog         "), "Big dog")
           })
+
+test_that("MakeUniqueNames",
+{
+    expect_equal(MakeUniqueNames(rep(letters[1:3], 1:3)), c("a", "b", "b ", "c", "c ", "c  "))
+})
