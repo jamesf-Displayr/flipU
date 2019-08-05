@@ -201,6 +201,8 @@ TrimWhitespace <- function (x){
 MakeUniqueNames <- function(names, suffix = " ")
 {
     ind.dup <- which(duplicated(names))
+    if (nchar(suffix) < 1)
+        stop("'suffix' cannot be empty")
     for (i in ind.dup)
     {
         new.name <- paste0(names[i], suffix)
