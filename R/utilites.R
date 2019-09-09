@@ -196,18 +196,20 @@ TrimWhitespace <- function (x){
 #' This is similar to \code{make.unique} but is useful for making less ugly names
 #' @param names A character vector
 #' @param suffix A character string to append to de-duplicated name.
-#'   If name with the suffix is already used then another copy of the suffix is added.
+#'   If name with the prefix is already used then another copy of the prefix and suffix is added.
+#' @param prefix A character string to prepend to de-duplicated name.
+#'   If name with the prefix is already used then another copy of the prefix and suffix is added.
 #' @export
-MakeUniqueNames <- function(names, suffix = " ")
+MakeUniqueNames <- function(names, suffix = " ", prefix = "")
 {
     ind.dup <- which(duplicated(names))
     if (nchar(suffix) < 1)
         stop("'suffix' cannot be empty")
     for (i in ind.dup)
     {
-        new.name <- paste0(names[i], suffix)
+        new.name <- paste0(prefix, names[i], suffix)
         while(i > 2 && any(names[1:(i-1)] == new.name))
-            new.name <- paste0(new.name, suffix)
+            new.name <- paste0(prefix, new.name, suffix)
         names[i] <- new.name
     }
     return(names)
