@@ -215,5 +215,19 @@ MakeUniqueNames <- function(names, suffix = " ", prefix = "")
     return(names)
 }
 
+#' @title Escape any special regex characters in a character vector
+#' @description Used to escape special characters from text before passing it
+#'   to regex functions such as gsub.
+#' @param text A character vector
+#' @export
+EscapeRegexSymbols <- function(text)
+{
+    # backslash needs to be first
+    regex.symbols <- c("\\", ".", "|", "(", ")", "[", "]", "{", "}", "^", "$",
+                       "*", "+", "?")
 
+    for (symb in regex.symbols)
+        text <- gsub(symb, paste0("\\", symb), text, fixed = TRUE)
+    text
+}
 

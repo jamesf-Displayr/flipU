@@ -44,3 +44,20 @@ test_that("MakeUniqueNames",
 {
     expect_equal(MakeUniqueNames(rep(letters[1:3], 1:3)), c("a", "b", "b ", "c", "c ", "c  "))
 })
+
+test_that("EscapeRegexSymbols",
+{
+    expect_equal(EscapeRegexSymbols("backslash: \\"), "backslash: \\\\")
+    expect_equal(EscapeRegexSymbols("full stop: ."), "full stop: \\.")
+    expect_equal(EscapeRegexSymbols("pipe: |"), "pipe: \\|")
+    expect_equal(EscapeRegexSymbols("parentheses: ()"), "parentheses: \\(\\)")
+    expect_equal(EscapeRegexSymbols("square brackets: []"),
+                 "square brackets: \\[\\]")
+    expect_equal(EscapeRegexSymbols("braces: {}"),
+                 "braces: \\{\\}")
+    expect_equal(EscapeRegexSymbols("caret: ^"), "caret: \\^")
+    expect_equal(EscapeRegexSymbols("dollar: $"), "dollar: \\$")
+    expect_equal(EscapeRegexSymbols("asterisk: *"),"asterisk: \\*")
+    expect_equal(EscapeRegexSymbols("plus: +"), "plus: \\+")
+    expect_equal(EscapeRegexSymbols("question mark: ?"), "question mark: \\?")
+})
