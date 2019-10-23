@@ -120,6 +120,9 @@ ParseTextList <- function(string)
 #' @export
 UniquePlaceholders <- function(n.placeholders, n.characters = 64, padding = "")
 {
+    if (n.placeholders == 0)
+        return(character(0))
+
     result <- character(0)
     while (length(result) < n.placeholders)
     {
