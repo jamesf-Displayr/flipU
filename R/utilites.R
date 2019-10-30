@@ -137,7 +137,7 @@ UniquePlaceholders <- function(n.placeholders, n.characters = 64, padding = "")
 #' \code{TrimLeadingWhitespace}
 #'
 #' Removes whitespace (e.g.,spaces, tab characters) from the beginning of a string.
-#' @param x A \code{\link{character}} that may contain whitecontaining text to be modified.
+#' @param x A \code{\link{character}} vector that may contain whitespace.
 #' @return A \code{character}.
 #' @export
 TrimLeadingWhitespace <- function (x) {
@@ -156,7 +156,7 @@ TrimLeadingWhitespace <- function (x) {
 #' \code{TrimTrailingWhitespace}
 #'
 #' Removes whitespace (e.g.,spaces, tab characters) from the end of a string.
-#' @param x A \code{\link{character}} that may contain whitecontaining text to be modified.
+#' @param x A \code{\link{character}} vector that may contain whitespace.
 #' @return A \code{character}.
 #' @export
 TrimTrailingWhitespace <- function (x) {
@@ -176,7 +176,7 @@ TrimTrailingWhitespace <- function (x) {
 #' \code{TrimWhitespace}
 #'
 #' Removes whitespace (e.g.,spaces, tab characters) from the beginning or end of a string.
-#' @param x A \code{\link{character}} that may contain whitecontaining text to be modified.
+#' @param x A \code{\link{character}} vector that may contain whitespace.
 #' @return A \code{character}.
 #' @export
 TrimWhitespace <- function (x){
@@ -192,6 +192,24 @@ TrimWhitespace <- function (x){
     if (is.null(names(x)))
         names(result) <- NULL
     result
+}
+
+#' @title TrimCharacter
+#' @description Trim single occurrances of leading and trailing characters from
+#'   the beginning and end of a string. All removes any whitespace.
+#' @param x A \code{\link{character}} vector that may contain characters to be trimmed.
+#' @param character A \code{\link{character}} vector of the characters to look for.
+#' @return A \code{character}.
+#' @export
+TrimCharacterAndWhitespace <- function(x, characters)
+{
+    x <- TrimWhitespace(x)
+    ind <- substr(x, 1, 1) %in% characters
+    x[ind] <- substr(x[ind], 2, nchar(x[ind]))
+    nchar.x <- nchar(x)
+    ind <- substr(x, nchar.x, nchar.x) %in% characters
+    x[ind] <- substr(x[ind], 1, nchar.x[ind] - 1)
+    TrimWhitespace(x)
 }
 
 #' De-duplicate names by appending characters

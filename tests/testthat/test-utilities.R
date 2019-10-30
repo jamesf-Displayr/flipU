@@ -40,6 +40,12 @@ test_that("Trim white space",
               expect_equal(TrimWhitespace("        Big dog         "), "Big dog")
           })
 
+test_that("Trim character and white space",
+{
+    expect_equal(TrimCharacterAndWhitespace(c("/ Excel + ", "&SPSS", "", "R"), c("/", "+", "&")),
+                 c("Excel", "SPSS", "", "R"))
+})
+
 test_that("MakeUniqueNames",
 {
     expect_equal(MakeUniqueNames(rep(letters[1:3], 1:3)), c("a", "b", "b ", "c", "c ", "c  "))
