@@ -7,7 +7,7 @@
 TrimTrailingWhitespace(x)
 }
 \arguments{
-\item{x}{A \code{\link{character}} that may contain whitecontaining text to be modified.}
+\item{x}{A \code{\link{character}} vector that may contain whitespace.}
 }
 \value{
 A \code{character}.

@@ -194,7 +194,7 @@ TrimWhitespace <- function (x){
     result
 }
 
-#' @title TrimCharacter
+#' @title TrimCharacterAndWhitespace
 #' @description Trim single occurrances of leading and trailing characters from
 #'   the beginning and end of a string. All removes any whitespace.
 #' @param x A \code{\link{character}} vector that may contain characters to be trimmed.
