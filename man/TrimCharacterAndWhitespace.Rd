@@ -9,7 +9,7 @@ TrimCharacterAndWhitespace(x, characters)
 \arguments{
 \item{x}{A \code{\link{character}} vector that may contain characters to be trimmed.}
 
-\item{character}{A \code{\link{character}} vector of the characters to look for.}
+\item{characters}{A \code{\link{character}} vector of the characters to look for.}
 }
 \value{
 A \code{character}.
