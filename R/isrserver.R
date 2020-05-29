@@ -20,3 +20,14 @@ IsTestRServer <- function()
     node.name <- Sys.info()[["nodename"]]
     grepl("^reustest.*", node.name)
 }
+
+#' @title IsDevRServer
+#' @description This function indicates if it is being run on the development R
+#' server.
+#' @return TRUE if running on the development R server. False otherwise.
+#' @export
+IsDevRServer <- function()
+{
+    node.name <- Sys.info()[["nodename"]]
+    grepl("^reusdev$", node.name)
+}
