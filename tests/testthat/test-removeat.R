@@ -15,6 +15,7 @@ test_that("RemoveAt.default: Un-named vector with character 'at'", {
     z <- 1:5
     expect_equal(RemoveAt(z, "A"), z)
     expect_equal(length(RemoveAt(z, names(z))), 5)
+    expect_equal(RemoveAt(z, "2,3", split = ","), z[-(2:3)])
 })
 
 
@@ -30,6 +31,7 @@ test_that("RemoveAt.default: Named vector", {
     names(z) = LETTERS[1:5]
     expect_equal(RemoveAt(z, "A"), z[-1])
     expect_equal(length(RemoveAt(z, names(z))), 0)
+    expect_equal(RemoveAt(z, "2,3", split = ","), z[-(2:3)])
 })
 
 test_that("RemoveAt.default: list", {
@@ -37,6 +39,7 @@ test_that("RemoveAt.default: list", {
     names(z) = LETTERS[1:5]
     expect_equal(RemoveAt(z, "A"), z[-1])
     expect_equal(length(RemoveAt(z, names(z))), 0)
+    expect_equal(RemoveAt(z, "2,3", split = ","), as.list(z[-(2:3)]))
 
   x = list(1:10, 1:10)
   expect_equal(RemoveAt(x[[1]], at = "sdfds"), x[[1]])
@@ -50,6 +53,7 @@ test_that("RemoveAt.default: array", {
     expect_equal(RemoveAt(z, "C"), z[, -1,, drop = FALSE])
     expect_equal(RemoveAt(z, MARGIN = 1, "C"), z)
     expect_equal(RemoveAt(z, MARGIN = 2, "C"), z[, -1,, drop = FALSE])
+    expect_equal(RemoveAt(z, MARGIN = 2, "1"), z[, -1,, drop = FALSE])
 
     z <- array(1:8, dim = c(2,2,2), dimnames = list(LETTERS[1:2], LETTERS[3:4], NULL))
     expect_equal(RemoveAt(z, "A"), z[-1,,, drop = FALSE])
@@ -96,6 +100,7 @@ test_that("RemoveAt: data.frame", {
     expect_equal(RemoveAt(z, "A", MARGIN = 1), z[-1,])
     expect_equal(RemoveAt(z, "A", MARGIN = 2), z)
     expect_equal(RemoveAt(z, list(NULL, 2)), z[,-2, drop = FALSE])
+    expect_equal(RemoveAt(z, list(NULL, "1"), split = TRUE), z[,-1, drop = FALSE])
 
 
     x <- matrix(NA, 3, 3, dimnames = list(LETTERS[1:3],LETTERS[1:3]))

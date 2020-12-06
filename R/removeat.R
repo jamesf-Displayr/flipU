@@ -25,7 +25,7 @@ RemoveAt.default <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, sp
 {
     if (is.null(at))
         return(x)
-    at <- unlist(at)
+    at <- parseIndex(unlist(at), split = split)
     if (is.character(at) && (is.null(names(x)) || all(!nzchar(at))))
         return(x)
     out <- x[indicesToRetain(names(x), at, length(x), ignore.case = ignore.case, split = split)]
@@ -89,6 +89,7 @@ removeArrayInputsBad <- function(x, at, MARGIN)
 #' @inherit RemoveAt
 removeFromDimension <- function(x, at = NULL, MARGIN = 1L, ignore.case = TRUE, split = NULL)
 {
+    at <- parseIndex(at)
     names <- dimnames(x)[[MARGIN]]
     if (is.character(at) && is.null(names))
         return(x)
@@ -143,4 +144,16 @@ indicesToRetain <- function(names, at, length.x, ignore.case = TRUE, split = NUL
     stop("'at' must contain character (string) or integer values.")
 }
 
+
+parseIndex <- function(index, split = NULL)
+{
+    if (!is.character(index))
+        return(index)
+    if (!is.null(split))
+        index <- ConvertCommaSeparatedStringToVector(index, split)
+    tmp <- suppressWarnings(as.numeric(index))
+    if (all(!is.na(tmp)))
+        return(tmp)
+    return(index)
+}
 
