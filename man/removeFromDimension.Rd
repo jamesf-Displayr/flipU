@@ -4,8 +4,13 @@
 \alias{removeFromDimension}
 \title{\code{RemoveAt}}
 \usage{
-removeFromDimension(x, at = NULL, MARGIN = 1L, ignore.case = TRUE,
-  split = NULL)
+removeFromDimension(
+  x,
+  at = NULL,
+  MARGIN = 1L,
+  ignore.case = TRUE,
+  split = NULL
+)
 }
 \arguments{
 \item{x}{The object from which the elements are to be removed.}

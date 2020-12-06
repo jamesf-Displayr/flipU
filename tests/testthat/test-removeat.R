@@ -95,6 +95,7 @@ test_that("RemoveAt: data.frame", {
     expect_equal(RemoveAt(z, "C"), z[, -1, drop = FALSE])
     expect_equal(RemoveAt(z, "A", MARGIN = 1), z[-1,])
     expect_equal(RemoveAt(z, "A", MARGIN = 2), z)
+    expect_equal(RemoveAt(z, list(NULL, 2)), z[,-2, drop = FALSE])
 
 
     x <- matrix(NA, 3, 3, dimnames = list(LETTERS[1:3],LETTERS[1:3]))
@@ -102,6 +103,9 @@ test_that("RemoveAt: data.frame", {
     expect_equal(z, x[2:3, 2, drop = FALSE])
     z <- RemoveAt(x, list("A", c("C","A")), MARGIN = 1:2)
     expect_equal(z, x[2:3, 2, drop = FALSE])
+    z <- RemoveAt(x, list(c(1,3), 2))
+    expect_equal(z, structure(c(NA, NA), .Dim = 1:2,
+        .Dimnames = list("B", c("A", "C"))))
     dat <- structure(list(Q6_A = structure(c(3L, 5L, 5L, 6L, 4L, 1L, 3L,
         6L, 5L, 6L, 6L, 5L, 5L, 4L, 3L, 6L, 6L, 5L, 5L, 4L), .Label = c("Don t Know",
         "Hate", "Dislike", "Neither like nor dislike", "Like", "Love"
@@ -162,6 +166,10 @@ test_that("RemoveAt: another vector and a list",
 
     expect_equal(dim(RemoveAt(x[[1]], at = "a; aa ", split = "[;,]")), dim(dat) - c(1, 0))
     expect_equal(RemoveAt(x[[2]], at = "a; aa ", split = "[;,]"), x[[2L]][3])
+
+    res <- RemoveAt(dat, at = list(1:3, NULL))
+    expect_equal(dimnames(res), list(c("Pepsi Light ", "Pepsi Max", "Pepsi ",
+            "NET Sugarred", "NET Sugarless", "NET"), "Age in years"))
 })
 
 # test_that("RemoveAtCharacterElements", # This is more extensively tested in flipTables via the functions for removing rows and columns

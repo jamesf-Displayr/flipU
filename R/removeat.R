@@ -37,7 +37,6 @@ RemoveAt.default <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, sp
 #' @describeIn RemoveAt Where only a \code{at} is provided, it is assumed
 #' to be the variables of a data frame. Otherwise, the first \code{MARGIN}
 #' is assumed the rows and the second the columns.
-#' @inherit RemoveAt
 #' @export
 RemoveAt.data.frame <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 {
@@ -58,7 +57,10 @@ RemoveAt.array <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, spli
     for (m in seq_along(MARGIN))
     {
         a <- if(is.list(at)) at[[m]] else at
-        out <- removeFromDimension(out, a, MARGIN[m], ignore.case, split)
+        if (length(a) == 0)
+            out <- out
+        else
+            out <- removeFromDimension(out, a, MARGIN[m], ignore.case, split)
     }
     CopyAttributes(out, x)
 }
@@ -88,7 +90,7 @@ removeArrayInputsBad <- function(x, at, MARGIN)
 removeFromDimension <- function(x, at = NULL, MARGIN = 1L, ignore.case = TRUE, split = NULL)
 {
     names <- dimnames(x)[[MARGIN]]
-    if (!is.character(at) || is.null(names))
+    if (is.character(at) && is.null(names))
         return(x)
     dims <- dim(x)
     i <- indicesToRetain(names, at, dims[MARGIN], ignore.case, split) # Indices or Logical

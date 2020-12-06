@@ -4,8 +4,7 @@
 \alias{ConvertCommaSeparatedStringToVector}
 \title{\code{ConvertCommaSeparatedStringToVector}}
 \usage{
-ConvertCommaSeparatedStringToVector(string, split = ",",
-  text.qualifier = NULL)
+ConvertCommaSeparatedStringToVector(string, split = ",", text.qualifier = NULL)
 }
 \arguments{
 \item{string}{A \code{\link{character}} to be converted.}

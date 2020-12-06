@@ -4,8 +4,7 @@
 \alias{RemoveAt.matrix}
 \title{\code{RemoveAt}}
 \usage{
-\method{RemoveAt}{matrix}(x, at = NULL, MARGIN = NULL,
-  ignore.case = TRUE, split = NULL)
+\method{RemoveAt}{matrix}(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 }
 \arguments{
 \item{x}{The object from which the elements are to be removed.}

@@ -5,11 +5,9 @@
 \alias{RemoveAt.data.frame}
 \title{\code{RemoveAt}}
 \usage{
-RemoveAt(x, at = NULL, MARGIN = NULL, ignore.case = TRUE,
-  split = NULL)
+RemoveAt(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 
-\method{RemoveAt}{data.frame}(x, at = NULL, MARGIN = NULL,
-  ignore.case = TRUE, split = NULL)
+\method{RemoveAt}{data.frame}(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 }
 \arguments{
 \item{x}{The object from which the elements are to be removed.}

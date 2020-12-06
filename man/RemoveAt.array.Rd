@@ -4,8 +4,7 @@
 \alias{RemoveAt.array}
 \title{\code{RemoveAt}}
 \usage{
-\method{RemoveAt}{array}(x, at = NULL, MARGIN = NULL,
-  ignore.case = TRUE, split = NULL)
+\method{RemoveAt}{array}(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 }
 \arguments{
 \item{x}{The object from which the elements are to be removed.}
