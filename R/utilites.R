@@ -252,3 +252,18 @@ EscapeRegexSymbols <- function(text)
     text
 }
 
+#' @title Determine the dimensions of an array or vector
+#' @description Used to give the dimensions of any array or vector.
+#' A vector is considered 1 dimensional and this function will return its
+#' length.
+#' @return An integer vector containing either the length of the vector
+#' or the integer dimensions of the array.
+#' @seealso Extension for \code{dim} in the same vein as \code{ncol} to \code{NCOL}.
+#' @export
+DIM <- function(x)
+{
+    x.dim <- dim(x)
+    if (is.null(x.dim))
+        return(length(x))
+    x.dim
+}
