@@ -229,7 +229,7 @@ MakeUniqueNames <- function(names, suffix = " ", prefix = "")
     for (i in ind.dup)
     {
         new.name <- paste0(prefix, names[i], suffix)
-        while(i > 2 && any(names[1:(i-1)] == new.name))
+        while(i > 2 && any(names[-i] == new.name))
             new.name <- paste0(prefix, new.name, suffix)
         names[i] <- new.name
     }
