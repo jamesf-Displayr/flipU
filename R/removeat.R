@@ -29,7 +29,9 @@ RemoveAt.default <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, sp
     if (is.character(at) && (is.null(names(x)) || all(!nzchar(at))))
         return(x)
     out <- x[indicesToRetain(names(x), at, length(x), ignore.case = ignore.case, split = split)]
-    CopyAttributes(out, x)
+    # Subscripting QTables (verbs:::`[.QTable`) already updates attributes
+    if (!inherits(x, "QTable")) out <- CopyAttributes(out, x)
+    out
 }
 
 
@@ -62,7 +64,9 @@ RemoveAt.array <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, spli
         else
             out <- removeFromDimension(out, a, MARGIN[m], ignore.case, split)
     }
-    CopyAttributes(out, x)
+    # Subscripting QTables (verbs:::`[.QTable`) already updates attributes
+    if (!inherits(x, "QTable")) out <- CopyAttributes(out, x)
+    out
 }
 
 #' @inherit RemoveAt
@@ -94,18 +98,10 @@ removeFromDimension <- function(x, at = NULL, MARGIN = 1L, ignore.case = TRUE, s
     if (is.character(at) && is.null(names))
         return(x)
     dims <- dim(x)
-    i <- indicesToRetain(names, at, dims[MARGIN], ignore.case, split) # Indices or Logical
-    # Updating 'x'
-    i.string <- paste0("c(", paste0(i, collapse = ","), ")")
-    len <- length(dims)
-    pre.i <- if (MARGIN <= 1) "" else paste0(rep(",", MARGIN - 1), collapse = "")
-    post.i <- if (MARGIN >= len) "" else paste0(rep(",", len - MARGIN), collapse = "")
-    #print(class(x))
-    #print(MARGIN)
-    #drop <- if(is.data.frame(x) && MARGIN == 1) "" else ", drop = FALSE"
-    drop <- ", drop = FALSE"
-    cmnd <- paste0("x[", pre.i, i.string, post.i, drop, "]")
-    eval(parse(text = cmnd))
+    args <- c(list(x), rep(alist(, )[1L], length(dims)), drop = FALSE)
+    # Indices or Logical
+    args[[MARGIN + 1L]] <- indicesToRetain(names, at, dims[MARGIN], ignore.case, split)
+    do.call(`[`, args)
 }
 
 #' indicesToRetain
@@ -133,15 +129,13 @@ indicesToRetain <- function(names, at, length.x, ignore.case = TRUE, split = NUL
         return(!names %in% at)
     }
     # 'at' is numeric
-    if (AllIntegers(at))
-    {
-        if (any(is.na(at) | at < 1))
-            stop("'at' must contain integers.")
-        if (max(at) > length.x)
-            stop("'at' contains a value of ", max(at), " which is bigger than the length of 'x'." )
-        return(-at)
-    }
-    stop("'at' must contain character (string) or integer values.")
+    if (anyNA(at) || !AllIntegers(at))
+        stop("'at' must contain character (string) or integer values.")
+    if (any(is.na(at) | at < 1))
+        stop("'at' must contain positive integers.")
+    if (max(at) > length.x)
+        stop("'at' contains a value of ", max(at), " which is bigger than the length of 'x'.")
+    -at
 }
 
 
@@ -152,8 +146,5 @@ parseIndex <- function(index, split = NULL)
     if (!is.null(split))
         index <- ConvertCommaSeparatedStringToVector(index, split)
     tmp <- suppressWarnings(as.numeric(index))
-    if (all(!is.na(tmp)))
-        return(tmp)
-    return(index)
+    if (all(!is.na(tmp))) tmp else index
 }
-
