@@ -76,6 +76,13 @@ RemoveAt.matrix <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, spl
     RemoveAt.array(x, at, MARGIN, ignore.case, split)
 }
 
+#' @inherit RemoveAt
+#' @export
+RemoveAt.ftable <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
+{
+    RemoveAt.matrix(x, at, MARGIN, ignore.case, split)
+}
+
 removeArrayInputsBad <- function(x, at, MARGIN)
 {
     if (is.null(at))
