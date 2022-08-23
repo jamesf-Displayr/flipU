@@ -1,7 +1,7 @@
 #' \code{RemoveAt}
 #'
 #' @description Removes one or more elements from an object. Dimensions are never
-#' If all elements are removed from a vector, then a 0-length vector is returned.
+#'              If all elements are removed from a vector, then a 0-length vector is returned.
 #' @param x The object from which the elements are to be removed.
 #' @param at A \code{\link{vector}} or indicating which elements are to be removed.
 #' When \code{at} is \code{\link{character}} elements with this name are removed. When \code{at}
@@ -19,7 +19,6 @@ RemoveAt <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NU
     UseMethod("RemoveAt")
 }
 
-#' @inherit RemoveAt
 #' @export
 RemoveAt.default <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 {
@@ -47,7 +46,11 @@ RemoveAt.data.frame <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE,
     RemoveAt.array(x, at, MARGIN, ignore.case, split)
 }
 
-#' @inherit RemoveAt
+#' @describeIn RemoveAt If \code{MARGIN} is not provided, the \code{at} argument
+#'                      is used along all margins. If \code{at} is a list, then each
+#'                      list element is sequentially used along each \code{MARGIN}
+#'                      If \code{at} is not a list, then it all elements inside is
+#'                      are removed across all margins.
 #' @export
 RemoveAt.array <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 {
@@ -58,7 +61,7 @@ RemoveAt.array <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, spli
     out <- x
     for (m in seq_along(MARGIN))
     {
-        a <- if(is.list(at)) at[[m]] else at
+        a <- if (is.list(at)) at[[m]] else at
         if (length(a) == 0)
             out <- out
         else
@@ -69,33 +72,43 @@ RemoveAt.array <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, spli
     out
 }
 
-#' @inherit RemoveAt
+#' @describeIn RemoveAt Applies the array method
 #' @export
 RemoveAt.matrix <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 {
     RemoveAt.array(x, at, MARGIN, ignore.case, split)
 }
 
-#' @inherit RemoveAt
+#' @describeIn RemoveAt If any characters are used in \code{at} but the \code{ftable}
+#'                      doesn't have dimnames then the original \code{ftable} is returned.
+#'                      If integer references are used, then the appropriate dim is
+#'                      removed using the array method.
+#'                      If the \code{ftable} has dimnames and characters are used \code{at}
+#'                      then array method is used so that the dimnames of \code{ftable}
+#'                      are used to determine the rows or columns in the removal.
+#'                      In all cases, the \code{row.var} and \code{col.var} attributes
+#'                      are not retained in the output.
 #' @export
 RemoveAt.ftable <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 {
-    RemoveAt.matrix(x, at, MARGIN, ignore.case, split)
+    character.requests <- is.character(at) ||
+                          (is.list(at) && any(vapply(at), is.character, logical(1L)))
+    no.dimnames <- is.null(dimnames(x))
+    if (no.dimnames && character.requests) return(x)
+    out <- RemoveAt.array(x, at, MARGIN, ignore.case, split)
+    attr(out, "row.vars") <- attr(out, "col.vars") <- NULL
+    out
 }
 
 removeArrayInputsBad <- function(x, at, MARGIN)
 {
     if (is.null(at))
         return(TRUE)
-    dimnames <- dimnames(x)
     if (is.list(at) && length(MARGIN) != length(at))
         stop("If 'at' is a list, it must have the same number of elements as MARGIN.")
-    if (is.character(at))
-        if (all(is.null(dimnames[MARGIN])))
-            return(TRUE)
-    FALSE
+    dimnames <- dimnames(x)
+    is.character(at) && all(is.null(dimnames[MARGIN]))
 }
-
 
 #' @inherit RemoveAt
 removeFromDimension <- function(x, at = NULL, MARGIN = 1L, ignore.case = TRUE, split = NULL)
@@ -111,6 +124,20 @@ removeFromDimension <- function(x, at = NULL, MARGIN = 1L, ignore.case = TRUE, s
     do.call(`[`, args)
 }
 
+determineIndicesFromChar <- function(at, names, ignore.case, split, trim.whitespace = TRUE)
+{
+    if (trim.whitespace)
+        at <- TrimWhitespace(at)
+    if (ignore.case)
+    {
+        at <- tolower(at)
+        names <- tolower(names)
+    }
+    if (!is.null(split))
+        at <- ConvertCommaSeparatedStringToVector(at, split)
+    !names %in% at
+}
+
 #' indicesToRetain
 #'
 #' Worker function for \code{RemoveAt}.
@@ -124,21 +151,11 @@ indicesToRetain <- function(names, at, length.x, ignore.case = TRUE, split = NUL
         return(1:length.x)
     # 'at' is character and able to represent a variable
     if (is.character(at))
-    {
-        at <- TrimWhitespace(at)
-        if (ignore.case)
-        {
-            at <- tolower(at)
-            names <- tolower(names)
-        }
-        if (!is.null(split))
-            at <- ConvertCommaSeparatedStringToVector(at, split)
-        return(!names %in% at)
-    }
+        return(determineIndicesFromChar(at, names, ignore.case, split))
     # 'at' is numeric
     if (anyNA(at) || !AllIntegers(at))
         stop("'at' must contain character (string) or integer values.")
-    if (any(is.na(at) | at < 1))
+    if (any(at < 1))
         stop("'at' must contain positive integers.")
     if (max(at) > length.x)
         stop("'at' contains a value of ", max(at), " which is bigger than the length of 'x'.")
