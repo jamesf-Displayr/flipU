@@ -92,7 +92,7 @@ RemoveAt.matrix <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, spl
 RemoveAt.ftable <- function(x, at = NULL, MARGIN = NULL, ignore.case = TRUE, split = NULL)
 {
     character.requests <- is.character(at) ||
-                          (is.list(at) && any(vapply(at), is.character, logical(1L)))
+                          (is.list(at) && any(vapply(at, is.character, logical(1L))))
     no.dimnames <- is.null(dimnames(x))
     if (no.dimnames && character.requests) return(x)
     out <- RemoveAt.array(x, at, MARGIN, ignore.case, split)

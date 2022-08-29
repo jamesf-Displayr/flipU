@@ -173,8 +173,6 @@ test_that("RemoveAt: data.frame", {
     expect_true(is.data.frame(out2))
 })
 
-
-
 test_that("RemoveAt: another vector and a list",
 {
     dat <- structure(c(39.9, 45.9, 43.1, 54.2, 43.8, 42, 40.3, 44.7, 42.3),
@@ -217,41 +215,75 @@ tbls <- readRDS("tbls.rds")
 
 ftbls <- lapply(tbls, ftable)
 
-default.string <- "NET, SUM"
-all.str <- c("NET", "SUM")
+default.string <- "NET, SUM, NET - SUM"
+all.str <- c("NET", "SUM", "NET - SUM")
 ftbl.names <- names(ftbls)
+
+deriveDimnames <- function(input.names) {
+    if (is.character(input.names)) return(input.names)
+    if (!is.list(input.names)) return(NULL)
+    constructed.names <- rev(expand.grid(rev(input.names)))
+    apply(constructed.names, 1L, paste0, collapse = " - ")
+}
+
+addBasicDimnames <- function(tbl) {
+    granular.dimnames <- unname(attributes(tbl)[c("row.vars", "col.vars")])
+    new.dimnames <- lapply(granular.dimnames, deriveDimnames)
+    dimnames(tbl) <- new.dimnames
+    tbl
+}
+
+ftbls <- lapply(ftbls, addBasicDimnames)
+
 for (i in seq_along(ftbls)) {
     ftbl <- ftbls[[i]]
     ftbl.name <- ftbl.names[[i]]
-    if (any(row.match <- rownames(ftbl) %in% all.str)) {
+    row.match <- rownames(ftbl) %in% all.str
+    if (any(row.match)) {
         requested.row <- all.str[which(all.str %in% rownames(ftbl))]
         test_that(paste0("Only ", requested.row, " row removed in ", ftbl.name), {
-            expected.tbl <- CopyAttributes(ftbl[!row.match, ], ftbl)
+            expected.tbl <- ftbl[!row.match, ]
             expect_equal(RemoveAt(ftbl, requested.row, 1, split = NULL, ignore.case = FALSE), expected.tbl)
             expect_equal(RemoveAt(ftbl, tolower(requested.row), 1, split = NULL, ignore.case = TRUE), expected.tbl)
             expect_equal(RemoveAt(ftbl, default.string, MARGIN = 1, split = "[;,]"), expected.tbl)
             # Check col removed tools
             col.to.remove <- sample.int(ncol(ftbl), size = 1)
-            expected.tbl <- CopyAttributes(ftbl[!row.match, -col.to.remove], ftbl)
+            expected.tbl <- ftbl[!row.match, -col.to.remove]
             expect_equal(RemoveAt(ftbl, list(requested.row, col.to.remove), 1:2, split = NULL, ignore.case = FALSE),
                          expected.tbl)
             expect_equal(RemoveAt(ftbl, list(default.string, col.to.remove), 1:2, split = "[;,]"),
                          expected.tbl)
         })
     }
-    if (any(col.match <- colnames(ftbl) %in% all.str)) {
+    col.match <- colnames(ftbl) %in% all.str
+    if (any(col.match)) {
         requested.col <- all.str[which(all.str %in% colnames(ftbl))]
         test_that(paste0("Only ", requested.col, " col removed in ", ftbl.name), {
-            expected.tbl <- CopyAttributes(ftbl[, !col.match], ftbl)
+            expected.tbl <- ftbl[, !col.match]
             expect_equal(RemoveAt(ftbl, requested.col, 2, split = NULL, ignore.case = FALSE), expected.tbl)
             expect_equal(RemoveAt(ftbl, tolower(requested.col), 2, split = NULL, ignore.case = TRUE), expected.tbl)
             expect_equal(RemoveAt(ftbl, default.string, MARGIN = 2, split = "[;,]"), expected.tbl)
             # Check col removed tools
             row.to.remove <- sample.int(nrow(ftbl), size = 1)
-            expected.tbl <- CopyAttributes(ftbl[-row.to.remove, !col.match], ftbl)
+            expected.tbl <- ftbl[-row.to.remove, !col.match]
             expect_equal(RemoveAt(ftbl, list(row.to.remove, requested.col), 1:2, split = NULL, ignore.case = FALSE),
                          expected.tbl)
             expect_equal(RemoveAt(ftbl, list(row.to.remove, default.string), 1:2, split = "[;,]"),
+                         expected.tbl)
+        })
+    }
+    if (any(row.match) && any(col.match)) {
+        requested.row <- all.str[all.str %in% rownames(ftbl)]
+        requested.col <- all.str[all.str %in% colnames(ftbl)]
+        int.row <- which(rownames(ftbl) %in% all.str)
+        int.col <- which(colnames(ftbl) %in% all.str)
+        test_that(paste0("Both rows and cols removed in ", ftbl.name), {
+            expected.tbl <- ftbl[!row.match, !col.match]
+            expect_equal(RemoveAt(ftbl, list(requested.row, requested.col), 1:2, split = "[;,]"),
+                         expected.tbl)
+            expect_equal(RemoveAt(ftbl, list(requested.row, int.col), 1:2, split = "[;,]"),
+                         expected.tbl)
+            expect_equal(RemoveAt(ftbl, list(int.row, requested.col), 1:2, split = "[;,]"),
                          expected.tbl)
         })
     }
