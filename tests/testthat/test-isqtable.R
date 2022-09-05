@@ -3,6 +3,7 @@ context("Test ability to identify QTables")
 not.q.table <- array(1:12, dim = 3:4, dimnames = list(LETTERS[1:3], letters[1:4]))
 legacy.q.table <- not.q.table
 attr(legacy.q.table, "questions") <- c("foo", "bar")
+attr(legacy.q.table, "name") <- "cool.q.table"
 classed.q.table <- not.q.table
 class(classed.q.table) <- "qTable"
 
