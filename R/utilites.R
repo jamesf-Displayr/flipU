@@ -268,3 +268,13 @@ DIM <- function(x)
         return(length(x))
     x.dim
 }
+
+#' Identify Q Table objects
+#' @param x Input to check if belonging to Q Table class or containing Q Table attributes
+#' @return Logical value \code{TRUE} if the input is identified as being a Q Table,
+#'         \code{FALSE} otherwise
+#' @export
+IsQTable <- function(x)
+{
+    inherits(x, "qTable") || !is.null(attr(x, "questions"))
+}
