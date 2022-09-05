@@ -270,6 +270,14 @@ DIM <- function(x)
 }
 
 #' Identify Q Table objects
+#'
+#' Inspects for the qTable class or checks if attributes exist
+#' to identify legacy Q Table with the \code{"questions"} and
+#' and \code{"name"} attributes
+#'
+#' @note An attribute \code{"statistic"} is not guaranteed to be present, as
+#' the names of the statistics computed may be present in the dimnames
+#"
 #' @param x Input to check if belonging to Q Table class or containing Q Table attributes
 #' @return Logical value \code{TRUE} if the input is identified as being a Q Table,
 #'         \code{FALSE} otherwise
