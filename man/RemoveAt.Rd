@@ -55,6 +55,14 @@ are removed across all margins.
 
 \item \code{RemoveAt(matrix)}: Applies the array method
 
-\item \code{RemoveAt(ftable)}: Applies the array method so that the dimnames of \code{ftable}
+\item \code{RemoveAt(ftable)}: If any characters are used in \code{at} but the \code{ftable}
+doesn't have dimnames then the original \code{ftable} is returned.
+If integer references are used, then the appropriate dim is
+removed using the array method.
+If the \code{ftable} has dimnames and characters are used \code{at}
+then array method is used so that the dimnames of \code{ftable}
+are used to determine the rows or columns in the removal.
+In all cases, the \code{row.var} and \code{col.var} attributes
+are not retained in the output.
 
 }}
