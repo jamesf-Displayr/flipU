@@ -85,5 +85,9 @@ test_that("DS-4287: Helper function to check dual-response-none variables in Q/D
     expect_error(RequireQuestionType(drn.bad, required.type = "PickAny",
                                      message.prefix = "",
                                      message.suffix = ""), "Binary - Multi")
+})
 
+test_that("Don't split text that is marked as having originated from a control", {
+    control.string <- SetIsStringIsFromControl("This is a comma, separated string")
+    expect_equal(ConvertCommaSeparatedStringToVector(control.string), control.string)
 })
