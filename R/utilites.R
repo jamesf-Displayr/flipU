@@ -287,3 +287,79 @@ IsQTable <- function(x)
     inherits(x, "qTable") ||
     (!is.null(attr(x, "questions")) && !is.null(attr(x, "name")))
 }
+
+
+#' Check that variables supplied belong to a certain question type.
+#'
+#' Helper function to use in Standard R items which require the user
+#' to select variables of a certain question type / variable set
+#' structure.
+#'
+#' @param variables A list or data frame containing the variables to check.
+#' @param required.type A string indicating the required questiontype value.
+#'        Should be one of: "PickAny", "PickOne", "PickOneMulti", "Number",
+#'        "NumberMulti", "NumberGrid", "PickAnyGrid", "Text", "TextMulti",
+#'        "Ranking", or "Experiment".
+#' @param message.prefix Text to display in the error message before the 
+#'        required question type / structure.
+#' @param message.suffix Text to display at the end of the message.
+#'
+#' @export
+RequireQuestionType <- function(variables, required.type, message.prefix, message.suffix) {
+    found.question.types <- vapply(variables,
+                             FUN = function(v) { return(attr(v, "questiontype"))},
+                             FUN.VALUE = character(1))
+
+    if (any(found.question.types != required.type)) {
+        # productName is an environment variable present in Q/Displayr
+        product.name <- get0("productName", ifnotfound = "Displayr")
+        structure.name <- GetTranslatedQuestionType(required.type, product.name)
+        structure <- if (product.name == "Q") " question"  else " variable set"
+        message.middle <- paste0(structure.name, structure)
+        stop(paste0(message.prefix, message.middle, message.suffix))
+    }
+}
+
+#' Get the Q/Displayr name for an entry in a questiontype attribute of a variable.
+#'
+#' Helper function to use in Standard R items which require the user
+#' to select variables of a certain question type / variable set
+#' structure.
+#'
+#' @param type A string indicating the required questiontype value.
+#'        Should be one of: "PickAny", "PickOne", "PickOneMulti", "Number",
+#'        "NumberMulti", "NumberGrid", "PickAnyGrid", "Text", "TextMulti",
+#'        "Ranking", or "Experiment".
+#' @param product.name A string, which should be either Displayr or Q
+#'
+#' @export
+GetTranslatedQuestionType <- function(type, product.name) {
+    if (! product.name %in% c("Displayr", "Q"))
+        stop("The product name should be either Q or Displayr.")
+    question.types <- list(Q = list("PickAny" = "Pick Any",
+                                "PickOne" = "Pick One",
+                                "PickOneMulti" = "Pick One - Multi",
+                                "Number" = "Number",
+                                "NumberMulti" = "Number - Multi",
+                                "NumberGrid" = "Number - Grid",
+                                "PickAnyGrid" = "Pick Any - Grid",
+                                "Text" = "Text",
+                                "TextMulti" = "Text - Multi", 
+                                "Ranking" = "Ranking",
+                                "Experiment" = "Experiment"),
+                       Displayr = list("PickAny" = "Binary - Multi",
+                                "PickOne" = "Nominal/Ordinal",
+                                "PickOneMulti" = "Nominal/Ordinal - Multi",
+                                "Number" = "Numeric",
+                                "NumberMulti" = "Numeric - Multi",
+                                "NumberGrid" = "Numeric - Grid",
+                                "PickAnyGrid" = "Binary - Grid",
+                                "Text" = "Text",
+                                "TextMulti" = "Text - Multi", 
+                                "Ranking" = "Ranking",
+                                "Experiment" = "Experiment"))
+    structure.name <- question.types[[product.name]][[type]]
+    if (is.null(structure.name))
+        stop(paste0(type, " is not a valid Question Type to supply."))
+    structure.name
+}
