@@ -69,6 +69,24 @@ test_that("EscapeRegexSymbols",
 })
 
 
+test_that("DS-4287: Helper function to check dual-response-none variables in Q/Displayr", {
+    fake.data <- data.frame(D1 = c(0,1,0,1), D2 = c(1,1,0,0))
+    addQuestionType <- function(x, question.type) {
+        attr(x, "questiontype") <- question.type
+        x
+    }
+
+    drn.good = data.frame(lapply(fake.data, addQuestionType, question.type = "PickAny"))
+    drn.bad = data.frame(lapply(fake.data, addQuestionType, question.type = "PickOneMulti"))
+
+    expect_error(RequireQuestionType(drn.good, required.type = "PickAny",
+                                     message.prefix = "",
+                                     message.suffix = ""), NA)
+    expect_error(RequireQuestionType(drn.bad, required.type = "PickAny",
+                                     message.prefix = "",
+                                     message.suffix = ""), "Binary - Multi")
+})
+
 test_that("Don't split text that is marked as having originated from a control", {
     control.string <- SetIsStringIsFromControl("This is a comma, separated string")
     expect_equal(ConvertCommaSeparatedStringToVector(control.string), control.string)
