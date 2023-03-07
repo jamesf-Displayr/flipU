@@ -307,8 +307,10 @@ IsQTable <- function(x)
 #' @export
 RequireQuestionType <- function(variables, required.type, message.prefix, message.suffix) {
     found.question.types <- vapply(variables,
-                             FUN = function(v) { return(attr(v, "questiontype"))},
-                             FUN.VALUE = character(1))
+                                   FUN = attr,
+                                   FUN.VALUE = character(1),
+                                   which = "questiontype",
+                                   exact = TRUE)
 
     if (any(found.question.types != required.type)) {
         # productName is an environment variable present in Q/Displayr
@@ -316,7 +318,7 @@ RequireQuestionType <- function(variables, required.type, message.prefix, messag
         structure.name <- GetTranslatedQuestionType(required.type, product.name)
         structure <- if (product.name == "Q") " question"  else " variable set"
         message.middle <- paste0(structure.name, structure)
-        stop(paste0(message.prefix, message.middle, message.suffix))
+        stop(message.prefix, message.middle, message.suffix)
     }
 }
 
@@ -334,8 +336,7 @@ RequireQuestionType <- function(variables, required.type, message.prefix, messag
 #'
 #' @export
 GetTranslatedQuestionType <- function(type, product.name) {
-    if (! product.name %in% c("Displayr", "Q"))
-        stop("The product name should be either Q or Displayr.")
+    stopifnot("The product name should be either Q or Displayr." = product.name %in% c("Displayr", "Q"))
     question.types <- list(Q = list("PickAny" = "Pick Any",
                                 "PickOne" = "Pick One",
                                 "PickOneMulti" = "Pick One - Multi",
@@ -360,6 +361,6 @@ GetTranslatedQuestionType <- function(type, product.name) {
                                 "Experiment" = "Experiment"))
     structure.name <- question.types[[product.name]][[type]]
     if (is.null(structure.name))
-        stop(paste0(type, " is not a valid Question Type to supply."))
+        stop(type, " is not a valid Question Type to supply.")
     structure.name
 }
