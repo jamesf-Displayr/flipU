@@ -21,10 +21,13 @@ ConvertCommaSeparatedStringToVector <- function(string, split = ",",
             else                                '[\x93\x94\x84]'        # windows (latin-1)
     string <- gsub(patt, "\"", string)
 
+    if (getIsStringFromControl(string))
+        return(string)
+
     split.text <- unlist(strsplit(string, split))
 
     result <- character(0)
-    if (!is.null(text.qualifier) && !getIsStringFromControl(string) && length(split.text) > 0)
+    if (!is.null(text.qualifier) && length(split.text) > 0)
     {
         matches <- gregexpr(split, string)
         delim <- sapply(matches[[1]], function (x) {

@@ -67,3 +67,9 @@ test_that("EscapeRegexSymbols",
     expect_equal(EscapeRegexSymbols("plus: +"), "plus: \\+")
     expect_equal(EscapeRegexSymbols("question mark: ?"), "question mark: \\?")
 })
+
+
+test_that("Don't split text that is marked as having originated from a control", {
+    control.string <- SetIsStringIsFromControl("This is a comma, separated string")
+    expect_equal(ConvertCommaSeparatedStringToVector(control.string), control.string)
+})
