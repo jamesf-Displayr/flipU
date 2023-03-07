@@ -295,7 +295,7 @@ IsQTable <- function(x)
 #' to select variables of a certain question type / variable set
 #' structure.
 #'
-#' @param variables A list or data frame containing the variables to check.
+#' @param variables A list containing the variables (or questions) to check.
 #' @param required.type A string indicating the required questiontype value.
 #'        Should be one of: "PickAny", "PickOne", "PickOneMulti", "Number",
 #'        "NumberMulti", "NumberGrid", "PickAnyGrid", "Text", "TextMulti",
