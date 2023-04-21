@@ -39,7 +39,7 @@ jobs:
       - save_cache:
           key: R-package-library-{{ checksum "/tmp/cache_vers" }}-{{ checksum "/tmp/R_version" }}
           paths:
-            - R/library
+            - ../R/library
 
       - run:
           name: "Check package"
