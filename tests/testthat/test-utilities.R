@@ -95,3 +95,36 @@ test_that("Don't split text that is marked as having originated from a control",
     #Control in Displayr can be NULL if user not selected anything yet
     expect_null(StringIsFromControl(NULL))
 })
+
+test_that("DS-4211: Names attributes are removed and data frames are returned as lists", {
+
+    num <- c(1,2,3,4,5,6,7)
+    fac <- factor(num)
+    txt <- letters[num]
+    num <- setNames(num, txt)
+    fac <- setNames(fac, txt)
+    txt <- setNames(txt, txt)
+    
+    x <- TidyDataForRVariableSet(num)
+    expect_null(attr(x, "names"))
+    expect_true(is.vector(x))
+
+    x <- TidyDataForRVariableSet(fac)
+    expect_null(attr(x, "names"))
+    expect_true(is.factor(x))
+
+    x <- TidyDataForRVariableSet(txt)
+    expect_null(attr(x, "names"))
+    expect_true(is.character(x))
+    
+    mat <- matrix(1:12, nrow = 4)
+    rownames(mat) <- letters[1:4]
+    colnames(mat) <- letters[1:3]
+    expect_null(rownames(TidyDataForRVariableSet(mat)))
+
+    df <- data.frame(fac, num, txt)
+    tidied.df <- TidyDataForRVariableSet(df)
+    expect_false(is.data.frame(tidied.df))
+    expect_true(is.list(tidied.df))
+
+})
