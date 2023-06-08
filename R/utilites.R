@@ -287,7 +287,7 @@ DIM <- function(x)
 #' @export
 IsQTable <- function(x)
 {
-    inherits(x, "qTable") ||
+    inherits(x, "QTable") ||
     (!is.null(attr(x, "questions")) && !is.null(attr(x, "name")))
 }
 
