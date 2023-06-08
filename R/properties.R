@@ -195,8 +195,8 @@ CopyAttributes <- function(data.without.attributes, data.with.attributes,
 
     if (is.list(data.without.attributes) && is.list(data.with.attributes))
         for (n in names(data.without.attributes))
-            data.without.attributes[[n]] <- CopyAttributes(data.without.attributes[[n]],
-                                                           data.with.attributes[[n]])
+            data.without.attributes[[n]] <- Recall(data.without.attributes[[n]],
+                                                  data.with.attributes[[n]])
 
     data.without.attributes
 }
