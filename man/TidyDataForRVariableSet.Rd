@@ -18,7 +18,7 @@ which are to be added to a Data Set in Displayr,
 remove any unecessary attributes that would cause
 the variables to be larger (in bytes) than they
 need to be. Variable attributes are not accessible
-once the variable has been added to a data set. The 
+once the variable has been added to a data set. The
 only exception is attributes for factors, which
 should be kept. If input is a data frame, return
 it as a list, since data frames must have row names
