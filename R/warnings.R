@@ -134,5 +134,18 @@ InterceptExceptions <- function(expr, warning.handler = NULL,
 WarnIfVariablesSelectedFromMultipleDataSets <- function() {
     form.controls <- ls(pattern = "^form", envir = .GlobalEnv)
     all.form.selections <- lapply(form.controls, FUN = get0)
-    all.form.selections
+    all.form.selections <- c(all.form.selections, list(filter = QFilter, weight = QPopulationWeight))
+    all.data.sets.referenced <- unique(unlist(lapply(all.form.selections, getDataFileNameFromDisplayrObject)))
+    if (length(all.data.sets.referenced)) {
+        warning("The selected data come from more than one Data Set. ",
+            "The data sets may have different lengths, and the cases ",
+            "may not be in the same order. The data sets used are: ",
+            paste0(all.data.sets.referenced, collapse = ", "))
+    }
+}
+
+getDataFileNameFromDisplayrObject <- function(x) {
+    if (is.list(x))
+        return(lapply(x, getDataFileNameFromDisplayrObject))
+    attr(x, "dataset")
 }
