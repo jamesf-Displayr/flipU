@@ -130,10 +130,9 @@ InterceptExceptions <- function(expr, warning.handler = NULL,
                         })
 }
 
+#' @export
 WarnIfVariablesSelectedFromMultipleDataSets <- function() {
-    form.controls <- ls(pattern = paste0("^", "form"),
-                          envir = .GlobalEnv)
+    form.controls <- ls(pattern = "^form", envir = .GlobalEnv)
     all.form.selections <- lapply(form.controls, FUN = get0)
-    # filter <- get0("QFilter")
-    # weight <- get0("Weight")
+    all.form.selections
 }
