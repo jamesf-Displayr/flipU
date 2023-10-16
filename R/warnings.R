@@ -130,21 +130,20 @@ InterceptExceptions <- function(expr, warning.handler = NULL,
                         })
 }
 
+#' '
 #' @export
 WarnIfVariablesSelectedFromMultipleDataSets <- function() {
-    form.controls <- ls(pattern = "^form", envir = .GlobalEnv)
-    all.form.selections <- lapply(form.controls, FUN = get0)
-    all.data.sets.referenced <- unique(unlist(lapply(all.form.selections, getDataFileNameFromDisplayrObject)))
-    if (length(all.data.sets.referenced) > 1) {
+    all.df.in.environment <- eapply(.GlobalEnv, FUN = attr, which = "dataset")
+    all.data.sets.referenced <- unique(unlist(all.df.in.environment))
+    if (length(all.data.sets.referenced) > 1)
         warning("The selected data come from more than one Data Set. ",
             "The data sets may have different lengths, and the cases ",
             "may not be in the same order. The data sets used are: ",
             paste0(all.data.sets.referenced, collapse = ", "))
-    }
 }
 
-getDataFileNameFromDisplayrObject <- function(x) {
-    if (is.list(x))
-        return(lapply(x, getDataFileNameFromDisplayrObject))
-    attr(x, "dataset")
-}
+# getDataFileNameFromDisplayrObject <- function(x) {
+#     if (is.list(x))
+#         return(lapply(x, getDataFileNameFromDisplayrObject))
+#     attr(x, "dataset")
+# }
