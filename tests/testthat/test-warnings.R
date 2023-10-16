@@ -43,3 +43,19 @@ test_that("Intercept exceptions",
         },"Y")
     })
 })
+
+test_that("Checking for multiple data sets in the environment", {
+    
+    expect_warning(WarnIfVariablesSelectedFromMultipleDataSets(), NA)
+    v1 <- c(1,2,3,4)
+    attr(v1, "dataset") <- "File1.sav"
+    v2 <- c(5,6,7,8)
+    attr(v2, "dataset") <- "File2.sav"
+    assign("v1", v1, envir = .GlobalEnv)
+    assign("v2", v2, envir = .GlobalEnv)
+    expected.warn <- paste0("The selected data come from more than one Data Set. ",
+            "The data sets may have different lengths, and the cases ",
+            "may not be in the same order. The data sets used are: ",
+            paste0(c("File1.sav", "File2.sav"), collapse = ", "))
+    expect_warning(WarnIfVariablesSelectedFromMultipleDataSets(), expected.warn)
+})

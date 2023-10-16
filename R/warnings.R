@@ -130,7 +130,15 @@ InterceptExceptions <- function(expr, warning.handler = NULL,
                         })
 }
 
-#' '
+#' @title WarnIfVariablesSelectedFromMultipleDataSets
+#' @description Check the contents of the global environment for values of
+#' the \code{dataset} attribute attached to any object. This will typically
+#' be the environment of a Standard R output in Displayr or Q. Warn if there
+#' is more than one data set. The purpose of this is to warn a Displayr
+#' user if they have accidentally supplied data from mupltiple files. Most
+#' analysis methods assume the data comes from a single file. Using mupltiple
+#' files is dangerous because the number of cases may not match even if they
+#' there is no guarantee that the cases are in the same order.
 #' @export
 WarnIfVariablesSelectedFromMultipleDataSets <- function() {
     all.df.in.environment <- eapply(.GlobalEnv, FUN = attr, which = "dataset")
@@ -142,8 +150,3 @@ WarnIfVariablesSelectedFromMultipleDataSets <- function() {
             paste0(all.data.sets.referenced, collapse = ", "))
 }
 
-# getDataFileNameFromDisplayrObject <- function(x) {
-#     if (is.list(x))
-#         return(lapply(x, getDataFileNameFromDisplayrObject))
-#     attr(x, "dataset")
-# }
