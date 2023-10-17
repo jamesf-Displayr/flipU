@@ -135,14 +135,15 @@ InterceptExceptions <- function(expr, warning.handler = NULL,
 #' the \code{dataset} attribute attached to any object. This will typically
 #' be the environment of a Standard R output in Displayr or Q. Warn if there
 #' is more than one data set. The purpose of this is to warn a Displayr
-#' user if they have accidentally supplied data from mupltiple files. Most
-#' analysis methods assume the data comes from a single file. Using mupltiple
-#' files is dangerous because the number of cases may not match even if they
-#' there is no guarantee that the cases are in the same order.
+#' user if they have accidentally supplied data from multiple files. Most
+#' analysis methods assume the data comes from a single file. Using multiple
+#' files is dangerous because the number of cases may not match, and even if 
+#' the number of cases does match, there is no guarantee that the cases are 
+#' in the same order.
 #' @export
 WarnIfVariablesSelectedFromMultipleDataSets <- function() {
-    all.df.in.environment <- eapply(.GlobalEnv, FUN = attr, which = "dataset")
-    all.data.sets.referenced <- unique(unlist(all.df.in.environment))
+    all.data.sets.in.environment <- eapply(.GlobalEnv, FUN = attr, which = "dataset")
+    all.data.sets.referenced <- unique(unlist(all.data.sets.in.environment))
     if (length(all.data.sets.referenced) > 1)
         warning("The selected data come from more than one Data Set. ",
             "The data sets may have different lengths, and the cases ",

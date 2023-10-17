@@ -45,7 +45,14 @@ test_that("Intercept exceptions",
 })
 
 test_that("Checking for multiple data sets in the environment", {
-    
+
+    # Clear global environment for this test, to be restored at the
+    # end of this test.
+    global.as.list <- as.list(.GlobalEnv)
+    temp.env <- environment()
+    list2env(global.as.list, temp.env)
+    remove(list = ls(envir = .GlobalEnv), envir = .GlobalEnv)
+
     expect_warning(WarnIfVariablesSelectedFromMultipleDataSets(), NA)
     v1 <- c(1,2,3,4)
     attr(v1, "dataset") <- "File1.sav"
@@ -58,4 +65,5 @@ test_that("Checking for multiple data sets in the environment", {
             "may not be in the same order. The data sets used are: ",
             paste0(c("File1.sav", "File2.sav"), collapse = ", "))
     expect_warning(WarnIfVariablesSelectedFromMultipleDataSets(), expected.warn)
+    list2env(global.as.list, .GlobalEnv)
 })
