@@ -28,7 +28,7 @@ workflows:
           context:
             - r_packages
           remote_deps: << pipeline.parameters.remote-deps >>
-          separate-test-job: false
+          separate_test_job: false
       - r-packages/deploy_package:
           executor: << pipeline.parameters.executor >>
           requires:
