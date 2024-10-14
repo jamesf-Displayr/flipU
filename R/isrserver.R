@@ -5,7 +5,7 @@
 IsRServer <- function()
 {
     node.name <- Sys.info()[["nodename"]]
-    node.name == "reusdev" ||
+    node.name == "jftest" || "reusdev" ||
         grepl("^reustest.*", node.name) ||
         grepl("^r.*prod.*", node.name)
 }
@@ -18,7 +18,7 @@ IsRServer <- function()
 IsTestRServer <- function()
 {
     node.name <- Sys.info()[["nodename"]]
-    grepl("^reustest.*", node.name)
+    node.name == "jftest" || grepl("^reustest.*", node.name)
 }
 
 #' @title IsDevRServer
